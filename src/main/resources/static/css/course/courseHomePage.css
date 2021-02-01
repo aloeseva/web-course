@@ -1,0 +1,148 @@
+.course {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.course__title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 45px;
+    margin: 15px 0;
+}
+
+.course__search__row {
+    display: flex;
+    flex-direction: column;
+}
+
+.course__btn {
+    margin: 15px 0;
+    padding: 5px 20px;
+    border-radius: 25px;
+    font-size: 25px;
+    background: linear-gradient(#6f4495, #f64c72);
+    color: aliceblue;
+
+    transition: 1s;
+}
+
+.course__input {
+    margin: 25px 15px;
+    padding: 5px;
+    background: white;
+    width: 100%;
+    font-size: 25px;
+    border: 2px solid #6f4495;
+}
+
+.course__lesson {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 15px 0;
+}
+
+.lesson__title {
+    font-weight: 400;
+    font-size: 25px;
+
+    width: 35%;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+    padding: 5px 0;
+
+    /*word-wrap: break-word;*/
+}
+
+.lesson__description {
+    font-size: 25px;
+    margin: 0 15px;
+    width: 45%;
+
+    padding: 5px 0;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.lesson__difficulty {
+    font-size: 25px;
+
+    width: 15%;
+}
+
+.lesson__btn {
+    padding: 5px;
+    border-radius: 25px;
+    background: linear-gradient(#6f4495, #f64c72);
+    font-size: 25px;
+    text-decoration: none;
+    text-align: center;
+
+    width: 15%;
+    color: aliceblue;
+    transition: 1s;
+
+}
+
+
+.lesson__btn:hover {
+    color: #242582;
+    text-decoration: none;
+}
+
+.create_lesson_btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 25px;
+    background: linear-gradient(#6f4495, #f64c72);
+    color: aliceblue;
+    text-align: center;
+
+    transition: 1s;
+}
+
+.create_lesson_btn:hover {
+    color: #242582;
+}
+
+.delete {
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 25px;
+    background: white;
+    border: 1px solid red;
+    color: red;
+    text-align: center;
+
+    transition: 1s;
+}
+
+.delete:hover {
+    background: red;
+    color: aliceblue;
+}
+
+@media all and (max-width: 700px) {
+    .lesson__description {
+        display: none;
+    }
+
+    .lesson__difficulty {
+        display: none;
+    }
+
+    .lesson__btn {
+        width: 30%;
+    }
+
+    .lesson__title {
+        width: 70%;
+    }
+}

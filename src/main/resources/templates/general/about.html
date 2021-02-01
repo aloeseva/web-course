@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EWA | Educational web app</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+          rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
+    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<div class="wrapper">
+
+    {% from 'macro/headerMacro.html' import header %}
+    {% from 'macro/footerMacro.html' import footer %}
+
+    {{ header(current_user) }}
+
+    <div class="content">
+        <div class="container">
+            <div class="Container">
+
+
+                <h1 class="text-center mt-4 col">
+                    <span class="font-weight-bold">Проект Шумбасова Всеволода</span>,
+                    студента 3 курса 2 группы.
+                </h1>
+
+                <div class="mt-4">
+                    <div class="row">
+                        <div class="col-1">
+                            <h2>1.</h2>
+                        </div>
+                        <div class="col">
+                            <h4>
+                                Образовательное веб-приложение. Задача: разработка клиент-серверного веб-приложения
+                                для ведения образовательной деятельности (размещения учебных материалов
+                                и проверка усвоеных знаний в тестовой форме) с дальнейшим размещением на веб-хостинге
+                                sprinthost.
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="row  mt-4">
+                        <div class="col-1">
+                            <h2>2.</h2>
+                        </div>
+                        <div class="col">
+                            <h4>
+                                Для решения поставленной задачи будет проведено изучение и анализ аналогичных платформ и
+                                методов онлайн обучения. На основе полученных на прошлом этапе
+                                информации и собственных идей будет спроектирована модель предметной области.
+                                На следующем этапе, основываясь на модели составленной на прошлом этапе, начнеться
+                                реализация
+                                приложения, используя навыки и знания полученные за 2 года обучения на ФКН
+                                и самостоятельному изучению веб технологий. Для реализации приложения будут
+                                использованны языки:
+                                <span class="font-weight-bold">Python</span>,
+                                <span class="font-weight-bold">JS</span>,
+                                <span class="font-weight-bold">HTML</span>,
+                                <span class="font-weight-bold">CSS</span>,
+                                а так же сопутствующие технологии и фреймворки:
+                                <span class="font-weight-bold">Flask</span>,
+                                <span class="font-weight-bold">Jinja</span>,
+                                <span class="font-weight-bold">SQLAlchemy</span>
+                                и другие при необходимости. Для хранения данных будет использоваться
+                                реляционная система управления базами данных -
+                                <span class="font-weight-bold">MySQL</span>.
+                                По завершении реализации веб-приложения будут проведены необходимые приготовления и
+                                развертывание его на веб-хостинге sprinthost. Далее будет составлен отчет
+                                в котором будет описанна задачи и результат проделанной работы.
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-1">
+                            <h2>3.</h2>
+                        </div>
+                        <div class="col">
+                            <h4>
+                                <div>
+                                    Языки:
+                                    <span class="font-weight-bold">Python</span>,
+                                    <span class="font-weight-bold">JS</span>,
+                                    <span class="font-weight-bold">HTML</span>,
+                                    <span class="font-weight-bold">CSS</span>.
+                                </div>
+                                </br >
+                                <div>
+                                    СУБД:
+                                    <span class="font-weight-bold">MySQL</span>.
+                                </div>
+                                </br>
+                                <div>
+                                    Инструмент для визуального проектирования баз данных:
+                                    <span class="font-weight-bold">MySQL Workbench</span>.
+                                </div>
+                                </br>
+                                <div>
+                                    Cпопутсввующие технологии и фреймворки:
+                                    <span class="font-weight-bold">Flask</span>,
+                                    <span class="font-weight-bold">Jinja</span>,
+                                    <span class="font-weight-bold">Bootstrap</span>,
+                                    <span class="font-weight-bold">SQLAlchemy</span>.
+                                </div>
+                                </br>
+                                <div>
+                                    Интегрированная среда разработки:
+                                    <span class="font-weight-bold">PyCharm</span>.
+                                </div>
+                                </br>
+                                <div>
+                                    Cистема управления пакетами:
+                                    <span class="font-weight-bold">Pip</span>.
+                                </div>
+
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="row  mt-4">
+                        <div class="col-1">
+                            <h2>4.1.</h2>
+                        </div>
+                        <div class="col">
+                            <h4>
+                                Функционал приложения:
+                                Регистрация пользователей,
+                                разделение пользователей по ролям,
+                                создание новых курсов,
+                                добавление учебных материалов,
+                                создание тестов,
+                                создание вопросов,
+                                прохождение тестов,
+                                сохранение результатов тестов,
+                                подсчет итоговой оценки,
+                                просмотри успеваемости.
+
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row  mt-4">
+                        <div class="col-1">
+                            <h2>4.2.</h2>
+                        </div>
+                        <div class="col">
+                            <h4>
+                                Интерфейс:
+                                Навигационная панель сверху,
+                                в которой имеються ссылки:
+                                на все курсы размещенные на сайте,
+                                на мои курсы (курсы на которые записался пользователь),
+                                на страницу с информациоей о проекте(эту страницу).
+                                Для учителей и администраторов предусмотрена возможность создавать новые курсы
+                                с интерфейсом для этого.
+                                В созданных курса предусмотрены кнопки для размещения материалов и тестов.
+                                В тестах можно создавать вопросы выбирая из тип в блоке select.
+                                Для пользователей (студентов) создан интерфейс в котором они могут скачивать выложенные
+                                материалы
+                                и проходить размещенные тесты.
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {{ footer(current_user) }}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+            crossorigin="anonymous"></script>
+
+
+</div>
+</body>
+</html>

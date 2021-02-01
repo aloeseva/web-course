@@ -1,0 +1,44 @@
+.test__name {
+    font-size: 40px;
+    text-align: center;
+    width: 100%;
+    font-weight: 700;
+    margin: 15px 0;
+}
+
+.all_results {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.user__result {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 20px;
+    border-radius: 15px;
+    border: 2px solid #898484;
+    margin-bottom: 15px;
+}
+
+.user__result__name {
+    font-size: 25px;
+}
+
+.user__result__right {
+    font-size: 25px;
+}
+
+.strong {
+    font-weight: 700;
+}
+
+.result__link {
+    padding: 5px 10px;
+    border-radius: 25px;
+    border: 2px solid #2f2fa2;
+    background: #6f4495;
+    color: aliceblue;
+}

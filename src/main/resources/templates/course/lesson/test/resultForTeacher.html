@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EWA | Educational web app</title>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+          rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
+    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/course/lesson/test/allResultForTeacher.css') }}">
+
+</head>
+<body>
+<div class="wrapper">
+
+    {% from 'macro/headerMacro.html' import header %}
+    {% from 'macro/footerMacro.html' import footer %}
+
+    {{ header(current_user) }}
+
+
+    <div class="content">
+        <div class="container">
+
+            <div class="test__name">
+                {{ test.name }}
+            </div>
+
+            <div class="all_results">
+                {% for result in user_result %}
+                    <div class="user__result">
+                        <div class="user__result__name">
+                            {% if result["user"].first_name != None and result["user"].last_name != none %}
+                                Имя: {{ result["user"].first_name }}
+                                Фамилия: {{ result["user"].last_name }}
+                            {% else %}
+                                Логин: {{ result["user"].login }}
+                            {% endif %}
+                        </div>
+                        <div class="user__result__right">
+                            {% if result["attempt_count"] != 0 %}
+                                Лучший результат: {{ result["best_result"] }} / {{ max_possible_result }}
+                                Всего попыток: {{ result["attempt_count"] }}
+                                <a class="result__link"
+                                   href="{{ url_for(
+                                   "user_result_for_teacher",
+                                   course_id=course.id,
+                                   lesson_id=lesson.id,
+                                   test_id=test.id,
+                                   attempt=1,
+                                   user_id=result["user"].id
+                                   ) }}">Подробнее</a>
+                            {% else %}
+                                Пользователь еще не прошел тест.
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="user__result">
+                    <div class="user__result__name">
+                        Колличество пользователей: {{ count_of_user }}, Средняя оценка: {{ avg_of_result }}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{ footer(current_user) }}
+
+</div>
+</body>
+</html>

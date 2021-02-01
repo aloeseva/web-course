@@ -1,0 +1,152 @@
+.lesson {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.lesson__name {
+    text-align: center;
+    font-size: 45px;
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.lesson__pre {
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.back__btn {
+    background: linear-gradient(#6f4495, #f64c72);
+    padding: 5px;
+    border-radius: 25px;
+    font-size: 25px;
+    width: 20%;
+    text-align: center;
+    margin-top: 15px;
+
+    text-decoration: none;
+    color: aliceblue;
+    transition: 1s;
+}
+
+.back__btn:hover {
+    text-decoration: none;
+    color: #242582;
+}
+
+.lesson__description {
+    font-size: 25px;
+}
+
+.material {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.material__title {
+    font-size: 35px;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+.material__name {
+    font-size: 30px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.material__btn {
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-size: 25px;
+    background: linear-gradient(#6f4495, #f64c72);
+
+    text-decoration: none;
+    color: aliceblue;
+
+    transition: 1s;
+}
+
+.material__btn:hover {
+    color: #242582;
+    text-decoration: none;
+}
+
+.test {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    margin: 10px 0;
+}
+
+.test__title {
+    font-size: 35px;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+.test__name {
+    font-size: 30px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.test__type {
+    font-size: 20px;
+}
+
+.test__exp {
+    font-size: 20px;
+}
+
+.test__btn {
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-size: 25px;
+    background: linear-gradient(#6f4495, #f64c72);
+
+    text-decoration: none;
+    color: aliceblue;
+
+    transition: 1s;
+}
+
+.test__btn:hover {
+    color: #242582;
+    text-decoration: none;
+}
+
+.create_btn {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 25px;
+    font-size: 25px;
+    background: linear-gradient(#6f4495, #f64c72);
+    color: aliceblue;
+    text-align: center;
+
+
+    transition: 1s;
+}
+
+.create_btn:hover {
+    color: #242582;
+}
+
+
+@media all and (max-width: 700px) {
+    .back__btn {
+        width: 100%;
+    }
+}
+
+
+
+
+

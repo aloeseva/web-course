@@ -1,4 +1,8 @@
-package webcourses.webcourse.domain;
+/*
+ * Copyright
+ */
+
+package webcourses.webcourse.entity;
 
 import java.util.Date;
 import javax.persistence.Entity;

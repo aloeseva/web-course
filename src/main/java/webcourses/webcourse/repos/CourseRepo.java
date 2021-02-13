@@ -1,8 +1,13 @@
+/*
+ * Copyright
+ */
+
 package webcourses.webcourse.repos;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import webcourses.webcourse.domain.Course;
+import webcourses.webcourse.entity.Course;
 
 public interface CourseRepo extends JpaRepository<Course, Long> {
-    Course findByName(String name);
+    Optional<Course> findByName(String name);
 }

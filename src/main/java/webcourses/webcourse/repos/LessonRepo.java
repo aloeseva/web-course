@@ -1,8 +1,13 @@
+/*
+ * Copyright
+ */
+
 package webcourses.webcourse.repos;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import webcourses.webcourse.domain.Lesson;
+import webcourses.webcourse.entity.Lesson;
 
 public interface LessonRepo extends JpaRepository<Lesson, Long> {
-    Lesson findByName(String name);
+    Optional<Lesson> findByName(String name);
 }

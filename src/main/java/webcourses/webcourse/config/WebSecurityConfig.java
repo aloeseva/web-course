@@ -1,3 +1,7 @@
+/*
+ * Copyright
+ */
+
 package webcourses.webcourse.config;
 
 import org.springframework.beans.factory.annotation.Autowired;

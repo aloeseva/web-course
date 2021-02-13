@@ -1,9 +1,13 @@
-package webcourses.webcourse.domain;
+/*
+ * Copyright
+ */
+
+package webcourses.webcourse.entity.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    USER, ADMIN;
+    USER, ADMIN, TEACHER;
 
     @Override
     public String getAuthority() {

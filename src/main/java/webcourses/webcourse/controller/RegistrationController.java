@@ -1,3 +1,7 @@
+/*
+ * Copyright
+ */
+
 package webcourses.webcourse.controller;
 
 import java.util.Collections;
@@ -6,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import webcourses.webcourse.domain.Role;
-import webcourses.webcourse.domain.User;
+import webcourses.webcourse.entity.User;
+import webcourses.webcourse.entity.enums.Role;
 import webcourses.webcourse.repos.UserRepo;
 
 @Controller

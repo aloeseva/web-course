@@ -1,7 +1,14 @@
-package webcourses.webcourse.domain;
+/*
+ * Copyright
+ */
+
+package webcourses.webcourse.entity;
 
 import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -12,9 +19,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import webcourses.webcourse.entity.enums.Role;
 
 @Entity
 @Table(name = "user")
@@ -28,18 +38,37 @@ public class User implements UserDetails {
     private boolean active;
     private String first_name;
     private String last_name;
+    private Date registration_date;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
-                    joinColumns = @JoinColumn(name = "user_id"))
+        joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-/*    @ElementCollection
-    @CollectionTable(name = "user_course", joinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+        name = "User_Course",
+        joinColumns = {@JoinColumn(name = "user_id")},
+        inverseJoinColumns = {@JoinColumn(name = "course_id")}
+    )
+    Set<Course> courses = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "user_create_course", joinColumns = @JoinColumn(name = "user_id"))*/
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+        name = "User_Create_Course",
+        joinColumns = {@JoinColumn(name = "user_id")},
+        inverseJoinColumns = {@JoinColumn(name = "course_id")}
+    )
+    Set<Course> createdCourses = new HashSet<>();
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ADMIN);
+    }
+
+    public boolean isTeacher() {
+        return roles.contains(Role.TEACHER);
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -122,11 +151,35 @@ public class User implements UserDetails {
         this.last_name = last_name;
     }
 
+    public Date getRegistration_date() {
+        return registration_date;
+    }
+
+    public void setRegistration_date(Date registration_date) {
+        this.registration_date = registration_date;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    public Set<Course> getCreatedCourses() {
+        return createdCourses;
+    }
+
+    public void setCreatedCourses(Set<Course> createdCourses) {
+        this.createdCourses = createdCourses;
     }
 }

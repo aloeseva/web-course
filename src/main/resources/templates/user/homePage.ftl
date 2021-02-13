@@ -1,10 +1,15 @@
+<#import "../macro/headerMacro.ftl" as h>
+<#import "../macro/footerMacro.ftl" as f>
+<#include "../macro/security.ftl">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>${user.username}</title>
+    <title>${name}</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
@@ -19,22 +24,18 @@
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
+    <@h.header />
 
 
     <div class="content">
         <div class="container">
 
-            <form class="user" method="POST" action="{{ url_for("user_page") }}">
+            <form class="user" method="POST" action="/user">
 
-                {% if is_teacher %}
-                    <a href="{{ url_for('created_courses') }}" class="createdCourses"> Созданные курсы</a>
-                {% endif %}
-
-
+                <#if user.isTeacher or user.isAdmin>
+                    <a href="{{ url_for('created_courses') }}" class="createdCourses"> Созданные
+                        курсы</a>
+                </#if>
 
                 <label class="user__label">Login</label>
                 <input
@@ -43,9 +44,8 @@
                         name="login_change"
                         id="login_change"
                         placeholder="Login"
-                        value={{ user.login }}
+                        value=${user.login}
                 >
-
 
                 <label class="user__label">E-mail</label>
                 <input
@@ -54,13 +54,12 @@
                         name="email_change"
                         id="email_change"
                         placeholder="E-mail"
-                        value={{ user.email }}
+                        value=${user.email }
                 >
-
 
                 <label class="user__label">Registration date</label>
                 <div class="user__date" type="text" name="reg_date" id="reg_date">
-                    {{ user.registration_date }}
+                    ${ user.registration_date }
                 </div>
 
 
@@ -71,7 +70,7 @@
                         name="first_name_change"
                         id="first_name_change"
                         placeholder="Иван"
-                        value={% if user.first_name != None %}{{ user.first_name }}{% endif %}
+                        value=${ user.first_name?if_exists}
                 >
 
 
@@ -82,7 +81,7 @@
                         name="last_name_change"
                         id="last_name_change"
                         placeholder="Иванов"
-                        value={% if user.last_name != None %}{{ user.last_name }}{% endif %}
+                        value=${ user.last_name?if_exists}
                 >
 
 
@@ -93,8 +92,7 @@
         </div>
     </div>
 
-    {{ footer(current_user) }}
-
+    <@f.footer />
 </div>
 </body>
 </html>

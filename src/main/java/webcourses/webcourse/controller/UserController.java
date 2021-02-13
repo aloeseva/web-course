@@ -1,3 +1,7 @@
+/*
+ * Copyright
+ */
+
 package webcourses.webcourse.controller;
 
 import java.util.Arrays;
@@ -13,24 +17,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import webcourses.webcourse.domain.Role;
-import webcourses.webcourse.domain.User;
+import webcourses.webcourse.entity.enums.Role;
+import webcourses.webcourse.entity.User;
 import webcourses.webcourse.repos.UserRepo;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
     @Autowired
     private UserRepo userRepo;
 
     @GetMapping
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public String userList(Model model) {
         model.addAttribute("users", userRepo.findAll());
         return "userList";
     }
 
     @GetMapping("{user}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userEditForm(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
@@ -38,7 +44,8 @@ public class UserController {
         return "userEdit";
     }
 
-    @PostMapping
+    @PostMapping("/user")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String userSave(
         @RequestParam String username,
         @RequestParam Map<String, String> form,
@@ -62,6 +69,8 @@ public class UserController {
 
         return "redirect:/user";
     }
+
+
 
 
 }

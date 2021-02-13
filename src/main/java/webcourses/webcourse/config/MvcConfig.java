@@ -1,3 +1,7 @@
+/*
+ * Copyright
+ */
+
 package webcourses.webcourse.config;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -22,5 +26,7 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }
+
+
 
 }

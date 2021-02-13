@@ -1,4 +1,8 @@
-package webcourses.webcourse.domain;
+/*
+ * Copyright
+ */
+
+package webcourses.webcourse.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

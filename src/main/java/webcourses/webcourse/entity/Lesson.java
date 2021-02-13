@@ -1,20 +1,31 @@
-package webcourses.webcourse.domain;
+/*
+ * Copyright
+ */
+
+package webcourses.webcourse.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "course")
-public class Course {
+@Table(name = "lesson")
+public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String description;
-    private String image_name;
+    private Integer difficulty;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Course course;
 
     public Long getId() {
         return id;
@@ -40,11 +51,19 @@ public class Course {
         this.description = description;
     }
 
-    public String getImage_name() {
-        return image_name;
+    public Integer getDifficulty() {
+        return difficulty;
     }
 
-    public void setImage_name(String image_name) {
-        this.image_name = image_name;
+    public void setDifficulty(Integer difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

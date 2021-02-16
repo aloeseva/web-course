@@ -5,16 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>qulice</module>
-    </modules>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <modules>
+        <module>qulice</module>
+    </modules>
+
 
     <groupId>web-courses</groupId>
     <artifactId>web-course</artifactId>
@@ -93,12 +94,14 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -111,32 +114,33 @@
             </properties>
 
             <build>
-                <plugins>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.qulice</groupId>
+                            <artifactId>qulice-maven-plugin</artifactId>
+                            <version>${qulice.version}</version>
+                            <configuration>
+                                <license>LICENSE.txt</license>
+                            </configuration>
 
-                    <plugin>
-                        <groupId>com.qulice</groupId>
-                        <artifactId>qulice-maven-plugin</artifactId>
-                        <version>${qulice.version}</version>
-                        <configuration>
-                            <license>LICENSE.txt</license>
-                        </configuration>
-
-                        <dependencies>
-                            <dependency>
-                                <groupId>web-courses</groupId>
-                                <artifactId>qulice</artifactId>
-                                <version>0.0.1-SNAPSHOT</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>web-course</groupId>
+                                    <artifactId>qulice</artifactId>
+                                    <version>${qulice.ext.version}</version>
+                                </dependency>
+                            </dependencies>
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>check</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
             </build>
         </profile>
     </profiles>

@@ -33,10 +33,14 @@ package webcourses.webcourse.entity;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -60,6 +64,18 @@ public class Course {
 
     @ManyToMany(mappedBy = "createdCourses")
     private Set<User> authors = new HashSet<>();
+
+    public Set<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(Set<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Set<Lesson> lessons = new HashSet<>();
 
     public Set<User> getAuthors() {
         return authors;

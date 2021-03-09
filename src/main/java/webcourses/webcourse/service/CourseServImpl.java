@@ -31,9 +31,12 @@
 package webcourses.webcourse.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webcourses.webcourse.entity.Course;
+import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.repos.CourseRepo;
 
 @Service
@@ -51,7 +54,17 @@ public class CourseServImpl implements CourseServ{
     }
 
     @Override
+    public Optional<Course> findById(Long id) {
+        return courseRepo.findById(id);
+    }
+
+    @Override
     public List<Course> findByName(String name) {
         return courseRepo.findByName(name);
+    }
+
+    @Override
+    public Set<Lesson> getAllLessons(Course course) {
+        return course.getLessons();
     }
 }

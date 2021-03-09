@@ -48,10 +48,6 @@ public class WebCourseApplication {
      */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(WebCourseApplication.class);
-
-    private WebCourseApplication() {
-    }
-
     /**
      * Entry point.
      *

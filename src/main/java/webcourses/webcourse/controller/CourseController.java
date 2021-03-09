@@ -33,6 +33,7 @@ package webcourses.webcourse.controller;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +41,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import webcourses.webcourse.entity.Course;
-import webcourses.webcourse.entity.User;
+import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.service.CourseServ;
+import webcourses.webcourse.service.UserServ;
 
 /**
  * Rest implementation of Course controller.
@@ -51,14 +53,18 @@ import webcourses.webcourse.service.CourseServ;
 @RestController
 public class CourseController {
     private final CourseServ courseServ;
+    private final UserServ userServ;
 
     @Autowired
-    public CourseController(CourseServ courseServ) {
+    public CourseController(CourseServ courseServ, UserServ userServ) {
         this.courseServ = courseServ;
+        this.userServ = userServ;
     }
 
     @GetMapping("/courses")
-    public String allCourses(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+    public String allCourses(
+        @RequestParam(required = false, defaultValue = "") String filter,
+        Model model) {
         List<Course> courses;
 
         if (filter != null && !filter.isEmpty()) {
@@ -73,17 +79,32 @@ public class CourseController {
         return "course/all";
     }
 
+    @GetMapping("/courses/my")
+    public String userCourses(Model model) {
+        model.addAttribute("courses", userServ.getCurrUser().getCourses());
+
+        return "course/myCourses";
+    }
+
+    @GetMapping("/courses/{course}")
+    public String showCourse(@PathVariable Course course, Model model) {
+        model.addAttribute("course", course);
+        return "course/info";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
     @GetMapping("/courses/create")
     public String createCoursePage() {
         return "course/create";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
     @PostMapping("/courses/create")
     public String createCourse(
         @RequestParam final String course_name,
         @RequestParam final String description,
         @RequestParam final String file
-        ) {
+    ) {
         Course course = new Course();
         String filename = null;
 
@@ -93,55 +114,36 @@ public class CourseController {
             filename = "course.png";
         }
 
-        //todo: создать абстракцию для создания.изменения курса?
+        //todo: создать абстракцию для создания/изменения курса?
         course.setName(course_name);
         course.setDescription(description);
         course.setImageName(filename);
 
-        //todo: узнать как брать текущего User
-        //todo: внести в бд новые курсы текущего User
+        userServ.getCurrUser().setCreatedCourses(course);
 
         return "course/all";
     }
 
-    @GetMapping("/courses/{course}")
-    public String showCourse(@PathVariable Course course, Model model) {
-        model.addAttribute("course", course);
-        return "course/info";
-    }
-
-    @GetMapping("/courses/createdCourses")
-    public String createdCourses() {
-        return "course/createdCourses";
-    }
-
-    @GetMapping("/courses/{course}/enroll")
-    public String enroll(@PathVariable Course course) {
-        //todo: course.setUsers(currentUser);
-        return "redirect:";
-    }
-
-    @GetMapping("/courses/my")
-    public String userCourses() {
-
-
-        return "course/myCourses";
-    }
-
     @GetMapping("/courses/{course}/home")
-    public String courseHomePage(@PathVariable Course course) {
+    public String courseHomePage(@PathVariable Course course, Model model) {
+        Set<Lesson> lessons = courseServ.getAllLessons(course);
+        model.addAttribute("is_creator", userServ.isCreator(course));
+        model.addAttribute("course", course);
+        model.addAttribute("lessons", lessons);
 
         return "course/homePage";
     }
 
-    private boolean isCreator(Course course) {
-        Set<User> creators = course.getAuthors();
-        boolean is_creator = false;
-        for (User creator:
-             creators) {
-            //todo: понять, как брать текущего пользователя
-            // if (creator.getId() == currUser.getId());
-        }
-        return is_creator;
+    @GetMapping("/courses/{course}/enroll")
+    public String enroll(@PathVariable Course course) {
+        userServ.getCurrUser().setCourses(course);
+
+        return "redirect:/courses/{course}/home";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
+    @GetMapping("/courses/createdCourses")
+    public String createdCourses() {
+        return "course/createdCourses";
     }
 }

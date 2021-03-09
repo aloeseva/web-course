@@ -1,3 +1,6 @@
+<#import "../../macro/headerMacro.ftl" as h>
+<#import "../../macro/footerMacro.ftl" as f>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,11 +22,7 @@
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
@@ -72,7 +71,7 @@
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 </body>

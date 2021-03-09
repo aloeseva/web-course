@@ -31,6 +31,7 @@
 package webcourses.webcourse.service;
 
 import java.util.List;
+import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
 
 public interface UserServ {
@@ -40,4 +41,10 @@ public interface UserServ {
     void deleteUser(User user);
 
     void saveUser(User user);
+
+    User findByName(String userName);
+
+    User getCurrUser();
+
+    boolean isCreator(Course course);
 }

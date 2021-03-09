@@ -28,62 +28,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.entity;
+package webcourses.webcourse.auth;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
-/**
- * Entity of Lesson.
- *
- * @since 0.0.1
- */
-@Entity
-@Table(name = "lesson")
-@SuppressWarnings("PMD.DataClass")
-public class Lesson {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private String description;
-    private Integer difficulty;
+@Component
+public class AuthenticationFacade implements IAuthenticationFacade {
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(final String description) {
-        this.description = description;
-    }
-
-    public Integer getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(final Integer difficulty) {
-        this.difficulty = difficulty;
+    @Override
+    public Authentication getAuthentication() {
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 }

@@ -28,15 +28,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.controller;
+package webcourses.webcourse.auth;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
 
-/**
- * Rest implementation of Lesson controller.
- *
- * @since 0.0.1
- */
-@RestController
-public class LessonConroller {
+public interface IAuthenticationFacade {
+    Authentication getAuthentication();
 }

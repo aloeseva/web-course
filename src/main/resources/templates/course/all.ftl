@@ -1,3 +1,7 @@
+<#import "../macro/headerMacro.ftl" as h>
+<#import "../macro/footerMacro.ftl" as f>
+<#include "../macro/security.ftl">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,54 +23,50 @@
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
             <div class="courses">
 
-                <form class="course__search__row" action="{{ url_for("all_courses") }}" method="GET">
-                    <input class="course__input" type="text" name="course_name">
+                <form class="course__search__row" action="/courses" method="GET">
+                    <input class="course__input" type="text" name="filter">
                     <input class="course__btn" type="submit" value="Поиск">
                 </form>
 
-                {% if is_teacher %}
-                    <a class="create_course_btn" href="{{ url_for('create_course') }}">Создать курс</a>
-                {% endif %}
+                <#if isTeacher>
+                    <a class="create_course_btn" href="/courses/create">Создать курс</a>
+                </#if>
 
                 <div class="courses__row">
 
-                    {% for course in courses %}
+                    <#list courses as course>
                         <div class="course">
 
                             <div class="course__img">
 
-                                {% if course.image_name != "" %}
-                                    <img src="{{ url_for('static', filename='image/' + course.image_name) }}"
+                                <#if course.image_name!>
+                                    <img src="/static/image/${course.imageName}"
                                          alt="course">
-                                {% else %}
-                                    <img src="{{ url_for('static', filename='image/course.png') }}" alt="course">
-                                {% endif %}
+                                <#else>
+                                    <img src="/static/image/course.png" alt="course">
+                                </#if>
 
                             </div>
                             <div class="course__last">
                                 <div class="course__title">
-                                    {{ course.name }}
+                                    ${course.name}
                                 </div>
-                                <a class="course__link" href="{{ url_for('show_course',course_id=course.id) }}">Подробнее</a>
+                                <a class="course__link" href="/courses/${course.id}">Подробнее</a>
                             </div>
                         </div>
-                    {% endfor %}
+                    </#list>
                 </div>
             </div>
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 </body>

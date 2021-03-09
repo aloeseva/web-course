@@ -1,10 +1,14 @@
+<#import "../macro/headerMacro.ftl" as h>
+<#import "../macro/footerMacro.ftl" as f>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Information about {{ course.name }}</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
@@ -21,26 +25,23 @@
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
             <div class="course">
                 <div class="course__img">
-                    {#                    <img src="{{ url_for('static', filename='image/course.png') }}" alt="course">#}
-                    {% if course.image_name != "" %}
-                        <img src="{{ url_for('static', filename='image/' + course.image_name) }}" alt="course">
-                    {% else %}
-                        <img src="{{ url_for('static', filename='image/course.png') }}" alt="course">
-                    {% endif %}
+                    <#if course.imageName!>
+                        <img src="/static/image/${course.imageName}"
+                             alt="course">
+                    <#else >
+                        <img src="/static/image/course.png"
+                             alt="course">
+                    </#if>
                 </div>
 
                 <div class="course__name">
-                    {{ course.name }}
+                    ${course.name}
                 </div>
 
 
@@ -50,23 +51,23 @@
 
 
                 <div class="course__description">
-                    {{ course.description }}
+                    ${ course.description}
                 </div>
 
-                <a href="{{ url_for('enroll', course_id = course.id) }}">
+                <a href="/courses/${course.id}/enroll">
                     <div class="course__enroll__btn">
-                        {% if enrolled %}
+                        <#if enrolled>
                             Зайти
-                        {% else %}
+                        <#else>
                             Записаться
-                        {% endif %}
+                        </#if>
                     </div>
                 </a>
             </div>
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 </body>

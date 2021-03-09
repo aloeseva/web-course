@@ -73,24 +73,24 @@ public class User implements UserDetails {
     private Date registrationDate;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_role",
-        joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "userRole",
+        joinColumns = @JoinColumn(name = "userId"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-        name = "User_Course",
-        joinColumns = {@JoinColumn(name = "user_id")},
-        inverseJoinColumns = {@JoinColumn(name = "course_id")}
+        name = "UserCourse",
+        joinColumns = {@JoinColumn(name = "userId")},
+        inverseJoinColumns = {@JoinColumn(name = "courseId")}
     )
     Set<Course> courses = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
-        name = "User_Create_Course",
-        joinColumns = {@JoinColumn(name = "user_id")},
-        inverseJoinColumns = {@JoinColumn(name = "course_id")}
+        name = "UserCreateCourse",
+        joinColumns = {@JoinColumn(name = "userId")},
+        inverseJoinColumns = {@JoinColumn(name = "courseId")}
     )
     Set<Course> createdCourses = new HashSet<>();
 
@@ -203,15 +203,15 @@ public class User implements UserDetails {
         return courses;
     }
 
-    public void setCourses(final Set<Course> courses) {
-        this.courses = courses;
+    public void setCourses(final Course course) {
+        this.courses.add(course);
     }
 
     public Set<Course> getCreatedCourses() {
         return createdCourses;
     }
 
-    public void setCreatedCourses(final Set<Course> courses) {
-        this.createdCourses = courses;
+    public void setCreatedCourses(final Course course) {
+        this.createdCourses.add(course);
     }
 }

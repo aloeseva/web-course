@@ -31,18 +31,23 @@
 package webcourses.webcourse.service;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webcourses.webcourse.auth.AuthenticationFacade;
+import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
 import webcourses.webcourse.repos.UserRepo;
 
 @Service
-public class UserServImpl implements UserServ{
+public class UserServImpl implements UserServ {
     private final UserRepo userRepo;
+    private final AuthenticationFacade facade;
 
     @Autowired
-    public UserServImpl(UserRepo userRepo) {
+    public UserServImpl(UserRepo userRepo, AuthenticationFacade facade) {
         this.userRepo = userRepo;
+        this.facade = facade;
     }
 
     @Override
@@ -61,4 +66,29 @@ public class UserServImpl implements UserServ{
     public void saveUser(User user) {
         userRepo.save(user);
     }
+
+    @Override
+    public User findByName(String userName) {
+        return userRepo.findByUsername(userName);
+    }
+
+    @Override
+    public User getCurrUser() {
+        return userRepo.findByUsername(facade.getAuthentication().getName());
+    }
+
+    @Override
+    public boolean isCreator(Course course) {
+        Set<User> creators = course.getAuthors();
+        boolean isCreator = false;
+        for (User creator :
+            creators) {
+            if (creator.getId().equals(getCurrUser().getId())) {
+                isCreator = true;
+            }
+        }
+        return isCreator;
+    }
+
+
 }

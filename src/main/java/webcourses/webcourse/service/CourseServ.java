@@ -31,11 +31,18 @@
 package webcourses.webcourse.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import webcourses.webcourse.entity.Course;
+import webcourses.webcourse.entity.Lesson;
 
 public interface CourseServ {
 
     List<Course> getAllCourses();
 
+    Optional<Course> findById(Long id);
+
     List<Course> findByName(String name);
+
+    Set<Lesson> getAllLessons(Course course);
 }

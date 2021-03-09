@@ -32,9 +32,11 @@
 
             <form class="user" method="POST" action="/user">
 
-                <#if user.isTeacher or user.isAdmin>
-                    <a href="{{ url_for('created_courses') }}" class="createdCourses"> Созданные
-                        курсы</a>
+                <#if isTeacher && isAdmin>
+                    <div>
+                        <a href="/createdCourses" class="createdCourses"> Созданные
+                            курсы</a>
+                    </div>
                 </#if>
 
                 <label class="user__label">Login</label>
@@ -44,7 +46,7 @@
                         name="login_change"
                         id="login_change"
                         placeholder="Login"
-                        value=${user.login}
+                        value=${name}
                 >
 
                 <label class="user__label">E-mail</label>
@@ -54,12 +56,12 @@
                         name="email_change"
                         id="email_change"
                         placeholder="E-mail"
-                        value=${user.email }
+                        value=${user.email}
                 >
 
                 <label class="user__label">Registration date</label>
                 <div class="user__date" type="text" name="reg_date" id="reg_date">
-                    ${ user.registration_date }
+                    ${ user.registrationDate }
                 </div>
 
 
@@ -70,7 +72,7 @@
                         name="first_name_change"
                         id="first_name_change"
                         placeholder="Иван"
-                        value=${ user.first_name?if_exists}
+                        value=${ user.firstName!}
                 >
 
 
@@ -81,17 +83,19 @@
                         name="last_name_change"
                         id="last_name_change"
                         placeholder="Иванов"
-                        value=${ user.last_name?if_exists}
+                        value=${ user.lastName!}
                 >
 
+                <input type="hidden" value="${user.id}" name="userId">
+                <input type="hidden" value="${_csrf.token}" name="_csrf">
 
                 <button type="submit" class="user__btn">Сохранить</button>
+
 
             </form>
 
         </div>
     </div>
-
     <@f.footer />
 </div>
 </body>

@@ -1,5 +1,31 @@
 /*
- * Copyright
+ * Copyright (c) 2011-2012, Qulice.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met: 1) Redistributions of source code must retain the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer. 2) Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3) Neither the name of the Qulice.com nor
+ * the names of its contributors may be used to endorse or promote
+ * products derived from this software without specific prior written
+ * permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+ * NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 package webcourses.webcourse.entity;
@@ -26,8 +52,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import webcourses.webcourse.entity.enums.Role;
 
+/**
+ * Entity class of User.
+ *
+ * @since 0.0.1
+ */
 @Entity
 @Table(name = "user")
+@SuppressWarnings("PMD.DataClass")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,9 +68,9 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private boolean active;
-    private String first_name;
-    private String last_name;
-    private Date registration_date;
+    private String firstName;
+    private String lastName;
+    private Date registrationDate;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role",
@@ -99,7 +131,7 @@ public class User implements UserDetails {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -107,7 +139,7 @@ public class User implements UserDetails {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -115,7 +147,7 @@ public class User implements UserDetails {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -123,7 +155,7 @@ public class User implements UserDetails {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(final boolean active) {
         this.active = active;
     }
 
@@ -131,39 +163,39 @@ public class User implements UserDetails {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(final String email) {
         this.email = email;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
     }
 
-    public Date getRegistration_date() {
-        return registration_date;
+    public Date getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegistration_date(Date registration_date) {
-        this.registration_date = registration_date;
+    public void setRegistrationDate(final Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(final Set<Role> roles) {
         this.roles = roles;
     }
 
@@ -171,7 +203,7 @@ public class User implements UserDetails {
         return courses;
     }
 
-    public void setCourses(Set<Course> courses) {
+    public void setCourses(final Set<Course> courses) {
         this.courses = courses;
     }
 
@@ -179,7 +211,7 @@ public class User implements UserDetails {
         return createdCourses;
     }
 
-    public void setCreatedCourses(Set<Course> createdCourses) {
-        this.createdCourses = createdCourses;
+    public void setCreatedCourses(final Set<Course> courses) {
+        this.createdCourses = courses;
     }
 }

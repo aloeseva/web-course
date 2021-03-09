@@ -28,74 +28,37 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.entity;
+package webcourses.webcourse.service;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import webcourses.webcourse.entity.User;
+import webcourses.webcourse.repos.UserRepo;
 
-/**
- * Entity of Answer.
- *
- * @since 0.0.1
- */
-@Entity
-@Table(name = "answer")
-@SuppressWarnings("PMD.DataClass")
-public class Answer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String text;
-    private Float val;
-    private String aType;
+@Service
+public class UserServImpl implements UserServ{
+    private final UserRepo userRepo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn
-    private Question question;
-
-    public Long getId() {
-        return id;
+    @Autowired
+    public UserServImpl(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    @Override
+    public List<User> getAllUsers() {
+        //todo: добавить логирование
+        //todo: подумать о перехвате ошибок
+        return userRepo.findAll();
     }
 
-    public String getText() {
-        return text;
+    @Override
+    public void deleteUser(User user) {
+        userRepo.delete(user);
     }
 
-    public void setText(final String text) {
-        this.text = text;
-    }
-
-    public Float getVal() {
-        return val;
-    }
-
-    public void setVal(final Float val) {
-        this.val = val;
-    }
-
-    public String getAType() {
-        return aType;
-    }
-
-    public void setAType(final String aType) {
-        this.aType = aType;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(final Question question) {
-        this.question = question;
+    @Override
+    public void saveUser(User user) {
+        userRepo.save(user);
     }
 }

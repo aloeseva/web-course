@@ -1,10 +1,15 @@
+<#import "../macro/headerMacro.ftl" as h>
+<#import "../macro/footerMacro.ftl" as f>
+<#--<#include "../macro/security.ftl">-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>All users</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
@@ -17,25 +22,21 @@
 
     <!-- bootstrap -->
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+          crossorigin="anonymous">
 </head>
 <body>
-
-
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
 
             <div class="users">
-                {% for user in users %}
+                <#list users as user>
                     <div class="user">
                         <div class="col">
                             Login:
@@ -55,33 +56,34 @@
                             Roles:
                         </div>
 
-                        <Form class="form-inline" method="POST" action={{ url_for('change_user_role') }}>
-                            <input hidden name="userId" value="{{ user.id }}">
-                            <div class="col">
-                                {% for role in roles %}
-                                    {{ role.name }}
-                                    <input class="form-control" type="checkbox" value="{{ role.name }}" name="roles"
-                                           {% if role in user.roles != None %}checked{% endif %}>
-                                {% endfor %}
-                            </div>
-                            <input type="submit" value="Изменить роль" class="user__btn">
+                        <Form class="form-inline" method="POST" action="/user/changeRole">
+                        <input hidden name="userId" value="${user.id}">
+                        <div class="col">
+                            <#list roles as role>
+                            ${role.name}
+                            <input class="form-control" type="checkbox" value="${role.name}"
+                                   name="roles"
+                                    ${user.roles?seq_contains(role)?string("checked", "")}>
+                            </#list>
+                        </div>
+                        <input type="submit" value="Изменить роль" class="user__btn">
                         </Form>
 
-                        <Form class="form-inline ml-3" method="POST" action={{ url_for('delete_user') }}>
-                            <input hidden name="userId" value="{{ user.id }}">
-                            <input type="submit" value="Удалить" class="user__btn">
+                        <Form class="form-inline ml-3" method="POST" action="/user/deleteUser">
+                        <input hidden name="userId" value="${ user.id }">
+                        <input type="submit" value="Удалить" class="user__btn">
                         </Form>
 
 
                     </div>
 
-                {% endfor %}
+                </#list>
             </div>
 
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 

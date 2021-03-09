@@ -1,5 +1,31 @@
 /*
- * Copyright
+ * Copyright (c) 2011-2012, Qulice.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met: 1) Redistributions of source code must retain the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer. 2) Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3) Neither the name of the Qulice.com nor
+ * the names of its contributors may be used to endorse or promote
+ * products derived from this software without specific prior written
+ * permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+ * NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 package webcourses.webcourse.entity;
@@ -13,15 +39,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Entity of Question.
+ *
+ * @since 0.0.1
+ */
 @Entity
 @Table(name = "question")
+@SuppressWarnings("PMD.DataClass")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String text;
-    private Float max_val;
-    private String q_type;
+    private Float maxVal;
+    private String qType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
@@ -31,7 +63,7 @@ public class Question {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -39,31 +71,31 @@ public class Question {
         return text;
     }
 
-    public void setText(String text) {
+    public void setText(final String text) {
         this.text = text;
     }
 
-    public Float getMax_val() {
-        return max_val;
+    public Float getMaxVal() {
+        return maxVal;
     }
 
-    public void setMax_val(Float max_val) {
-        this.max_val = max_val;
+    public void setMaxVal(final Float maxVal) {
+        this.maxVal = maxVal;
     }
 
-    public String getQ_type() {
-        return q_type;
+    public String getQType() {
+        return qType;
     }
 
-    public void setQ_type(String q_type) {
-        this.q_type = q_type;
+    public void setQType(final String qType) {
+        this.qType = qType;
     }
 
     public Test getTest() {
         return test;
     }
 
-    public void setTest(Test test) {
+    public void setTest(final Test test) {
         this.test = test;
     }
 }

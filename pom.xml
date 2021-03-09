@@ -12,11 +12,6 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <modules>
-        <module>qulice</module>
-    </modules>
-
-
     <groupId>web-courses</groupId>
     <artifactId>web-course</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -88,60 +83,37 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.qulice</groupId>
+                <artifactId>qulice-maven-plugin</artifactId>
+                <version>0.18.19</version>
+                <configuration>
+                    <license>file:${basedir}/LICENSE.txt</license>
+                    <excludes>
+                        <exclude>checkstyle:/src/main/resources/.*</exclude>
+                        <exclude>checkstyle:/src/test/.*</exclude>
+                        <exclude>pmd:/src/test/.*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>Qulice</id>
-
-            <properties>
-                <qulice.version>0.18.19</qulice.version>
-                <qulice.ext.version>0.0.1-SNAPSHOT</qulice.ext.version>
-            </properties>
-
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>com.qulice</groupId>
-                            <artifactId>qulice-maven-plugin</artifactId>
-                            <version>${qulice.version}</version>
-                            <configuration>
-                                <license>LICENSE.txt</license>
-                            </configuration>
-
-                            <dependencies>
-                                <dependency>
-                                    <groupId>web-course</groupId>
-                                    <artifactId>qulice</artifactId>
-                                    <version>${qulice.ext.version}</version>
-                                </dependency>
-                            </dependencies>
-                            <executions>
-                                <execution>
-                                    <goals>
-                                        <goal>check</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
 </project>

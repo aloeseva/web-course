@@ -1,3 +1,6 @@
+<#import "../macro/headerMacro.ftl" as h>
+<#import "../macro/footerMacro.ftl" as f>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,15 +23,11 @@
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
-            <form class="mt-3" method="POST" action="{{ url_for("create_course") }}" enctype="multipart/form-data">
+            <form class="mt-3" method="POST" action="/courses/create" enctype="multipart/form-data">
                 <label class="course__label">Название курса</label>
                 <input
                         type="text"
@@ -59,11 +58,11 @@
                 <button type="submit" class="course__btn">Создать</button>
             </form>
 
-            <a href="{{ url_for('all_courses') }}" class="back">Назад</a>
+            <a href="/courses/all" class="back">Назад</a>
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 

@@ -28,74 +28,30 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.entity;
+package webcourses.webcourse.service;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import webcourses.webcourse.entity.Course;
+import webcourses.webcourse.repos.CourseRepo;
 
-/**
- * Entity of Answer.
- *
- * @since 0.0.1
- */
-@Entity
-@Table(name = "answer")
-@SuppressWarnings("PMD.DataClass")
-public class Answer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String text;
-    private Float val;
-    private String aType;
+@Service
+public class CourseServImpl implements CourseServ{
+    private final CourseRepo courseRepo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn
-    private Question question;
-
-    public Long getId() {
-        return id;
+    @Autowired
+    public CourseServImpl(CourseRepo courseRepo) {
+        this.courseRepo = courseRepo;
     }
 
-    public void setId(final Long id) {
-        this.id = id;
+    @Override
+    public List<Course> getAllCourses() {
+        return courseRepo.findAll();
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(final String text) {
-        this.text = text;
-    }
-
-    public Float getVal() {
-        return val;
-    }
-
-    public void setVal(final Float val) {
-        this.val = val;
-    }
-
-    public String getAType() {
-        return aType;
-    }
-
-    public void setAType(final String aType) {
-        this.aType = aType;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(final Question question) {
-        this.question = question;
+    @Override
+    public List<Course> findByName(String name) {
+        return courseRepo.findByName(name);
     }
 }

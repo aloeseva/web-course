@@ -1,4 +1,9 @@
+<#import "../macro/headerMacro.ftl" as h>
+<#import "../macro/footerMacro.ftl" as f>
+<#include "../macro/security.ftl">
+
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,50 +24,46 @@
 <body>
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
 
             <div class="courses">
 
-                <a class="create_course_btn" href="{{ url_for('create_course') }}" style="margin-top: 20px;">Создать курс</a>
+                <a class="create_course_btn" href="/courses/create" style="margin-top: 20px;">Создать курс</a>
 
 
                 <div class="courses__row">
 
-                    {% for course in current_user.created_courses %}
+                    <#list user.createdCourses as course>
                         <div class="course">
 
                             <div class="course__img">
 
-                                {% if course.image_name != "" %}
-                                    <img src="{{ url_for('static', filename='image/' + course.image_name) }}"
+                                <#if course.imageName!>
+                                    <img src="/static/image/${course.imageName}"
                                          alt="course">
-                                {% else %}
-                                    <img src="{{ url_for('static', filename='image/course.png') }}" alt="course">
-                                {% endif %}
+                                <#else>
+                                    <img src="/static/image/course.png" alt="course">
+                                </#if>
 
                             </div>
                             <div class="course__last">
                                 <div class="course__title">
-                                    {{ course.name }}
+                                    ${course.name}
                                 </div>
                                 <a class="course__link"
-                                   href="{{ url_for( 'show_course',course_id=course.id) }}">Подробнее</a>
+                                   href="/courses/${course.id}">Подробнее</a>
                             </div>
                         </div>
-                    {% endfor %}
+                    </#list>
                 </div>
             </div>
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 </body>

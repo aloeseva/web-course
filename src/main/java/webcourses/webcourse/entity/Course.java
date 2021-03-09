@@ -1,5 +1,31 @@
 /*
- * Copyright
+ * Copyright (c) 2011-2012, Qulice.com
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met: 1) Redistributions of source code must retain the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer. 2) Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following
+ * disclaimer in the documentation and/or other materials provided
+ * with the distribution. 3) Neither the name of the Qulice.com nor
+ * the names of its contributors may be used to endorse or promote
+ * products derived from this software without specific prior written
+ * permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+ * NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+ * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 package webcourses.webcourse.entity;
@@ -13,15 +39,21 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+/**
+ * Entity of Course.
+ *
+ * @since 0.0.1
+ */
 @Entity
 @Table(name = "course")
+@SuppressWarnings("PMD.DataClass")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String description;
-    private String image_name;
+    private String imageName;
 
     @ManyToMany(mappedBy = "courses")
     private Set<User> users = new HashSet<>();
@@ -33,7 +65,7 @@ public class Course {
         return authors;
     }
 
-    public void setAuthors(Set<User> authors) {
+    public void setAuthors(final Set<User> authors) {
         this.authors = authors;
     }
 
@@ -41,7 +73,7 @@ public class Course {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(final Set<User> users) {
         this.users = users;
     }
 
@@ -49,7 +81,7 @@ public class Course {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -57,7 +89,7 @@ public class Course {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -65,15 +97,15 @@ public class Course {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
-    public String getImage_name() {
-        return image_name;
+    public String getImageName() {
+        return imageName;
     }
 
-    public void setImage_name(String image_name) {
-        this.image_name = image_name;
+    public void setImageName(final String imageName) {
+        this.imageName = imageName;
     }
 }

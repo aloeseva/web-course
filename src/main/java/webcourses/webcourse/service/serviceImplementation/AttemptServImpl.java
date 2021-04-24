@@ -28,31 +28,26 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.service;
+package webcourses.webcourse.service.serviceImplementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import webcourses.webcourse.repos.UserRepo;
+import webcourses.webcourse.entity.Test;
+import webcourses.webcourse.entity.User;
+import webcourses.webcourse.repos.AttemptRepo;
+import webcourses.webcourse.service.AttemptServ;
 
-/**
- * Service class for user.
- *
- * @since 0.0.1
- */
 @Service
-public class UserService implements UserDetailsService {
-    private final UserRepo userrepo;
+public class AttemptServImpl implements AttemptServ {
+    private final AttemptRepo attemptRepo;
 
     @Autowired
-    public UserService(UserRepo userrepo) {
-        this.userrepo = userrepo;
+    public AttemptServImpl(AttemptRepo attemptRepo) {
+        this.attemptRepo = attemptRepo;
     }
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        return this.userrepo.findByUsername(username);
+    public Long getTestAttempt(User user, Test test) {
+        return attemptRepo.findByIdAndId(user, test).getCount();
     }
 }

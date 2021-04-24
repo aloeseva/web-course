@@ -28,19 +28,39 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.service;
+package webcourses.webcourse.service.serviceImplementation;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import webcourses.webcourse.entity.Course;
+import org.springframework.stereotype.Service;
 import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.Test;
 import webcourses.webcourse.repos.LessonRepo;
+import webcourses.webcourse.service.LessonServ;
 
-public class LessonServImpl implements LessonServ{
+@Service
+public class LessonServImpl implements LessonServ {
     private final LessonRepo lessonRepo;
 
     @Autowired
     public LessonServImpl(LessonRepo lessonRepo) {
         this.lessonRepo = lessonRepo;
+    }
+
+
+    @Override
+    public List<Lesson> getAllLessons() {
+        return lessonRepo.findAll();
+    }
+
+    @Override
+    public void saveLesson(Lesson lesson) {
+        lessonRepo.save(lesson);
+    }
+
+    @Override
+    public Set<Test> getAllLessonsTests(Lesson lesson) {
+        return lesson.getTests();
     }
 }

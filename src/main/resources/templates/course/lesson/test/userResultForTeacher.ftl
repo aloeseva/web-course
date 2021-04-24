@@ -1,20 +1,17 @@
+<#import "../../../macro/headerMacro.ftl" as h>
+<#import "../../../macro/footerMacro.ftl" as f>
+<#import "../../../macro/headGeneral.ftl" as g>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Result</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
-          rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
-    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+    <@g.head />
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/course/lesson/test/result.css') }}">
-    <script src="{{ url_for('static', filename='js/result.js') }}"></script>
+    <link rel="stylesheet" href="static/css/course/lesson/test/result.css">
+    <script src="static/js/result.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
@@ -23,11 +20,7 @@
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">

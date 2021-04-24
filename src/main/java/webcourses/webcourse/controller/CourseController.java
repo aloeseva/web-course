@@ -30,27 +30,28 @@
 
 package webcourses.webcourse.controller;
 
-import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.service.CourseServ;
 import webcourses.webcourse.service.UserServ;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Rest implementation of Course controller.
  *
  * @since 0.0.1
  */
-@RestController
+@Controller
 public class CourseController {
     private final CourseServ courseServ;
     private final UserServ userServ;

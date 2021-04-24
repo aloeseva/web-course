@@ -1,6 +1,6 @@
 <#import "../macro/headerMacro.ftl" as h>
 <#import "../macro/footerMacro.ftl" as f>
-<#--<#include "../macro/security.ftl">-->
+<#import "../macro/headGeneral.ftl" as g>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,17 +8,9 @@
     <meta charset="UTF-8">
     <title>All users</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
-          rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
-    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+    <@g.head />
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/allUsers.css') }}">
+    <link rel="stylesheet" href="static/css/allUsers.css">
 
     <!-- bootstrap -->
 
@@ -57,21 +49,24 @@
                         </div>
 
                         <Form class="form-inline" method="POST" action="/user/changeRole">
-                        <input hidden name="userId" value="${user.id}">
-                        <div class="col">
-                            <#list roles as role>
-                            ${role.name}
-                            <input class="form-control" type="checkbox" value="${role.name}"
-                                   name="roles"
-                                    ${user.roles?seq_contains(role)?string("checked", "")}>
-                            </#list>
-                        </div>
-                        <input type="submit" value="Изменить роль" class="user__btn">
+                            <input hidden name="userId" value="${user.id}">
+                            <input type="hidden" value="${_csrf.token}" name="_csrf"/>
+
+                            <div class="col">
+                                <#list roles as role>
+                                    ${role.name}
+                                    <input class="form-control" type="checkbox" value="${role.name}"
+                                           name="roles"
+                                            ${user.roles?seq_contains(role)?string("checked", "")}>
+                                </#list>
+                            </div>
+                            <input type="submit" value="Изменить роль" class="user__btn">
                         </Form>
 
                         <Form class="form-inline ml-3" method="POST" action="/user/deleteUser">
-                        <input hidden name="userId" value="${ user.id }">
-                        <input type="submit" value="Удалить" class="user__btn">
+                            <input type="hidden" value="${_csrf.token}" name="_csrf"/>
+                            <input hidden name="userId" value="${ user.id }">
+                            <input type="submit" value="Удалить" class="user__btn">
                         </Form>
 
 

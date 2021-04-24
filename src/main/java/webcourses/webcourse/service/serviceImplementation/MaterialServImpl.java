@@ -27,22 +27,33 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package webcourses.webcourse.config;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+package webcourses.webcourse.service.serviceImplementation;
 
-/**
- * Application config class.
- *
- * @since 0.0.1
- */
-@Configuration
-@SuppressWarnings("PMD")
-public class AppConfig {
-    @Bean
-    public static ModelMapper modelMapper() {
-        return new ModelMapper();
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.Material;
+import webcourses.webcourse.repos.MaterialRepo;
+import webcourses.webcourse.service.MaterialServ;
+
+@Service
+public class MaterialServImpl implements MaterialServ {
+    private final MaterialRepo materialRepo;
+
+    @Autowired
+    public MaterialServImpl(MaterialRepo materialRepo) {
+        this.materialRepo = materialRepo;
+    }
+
+    @Override
+    public Optional<Material> getAllMaterials(Lesson lesson) {
+        return materialRepo.findByLesson(lesson);
+    }
+
+    @Override
+    public void save(Material material) {
+        materialRepo.save(material);
     }
 }

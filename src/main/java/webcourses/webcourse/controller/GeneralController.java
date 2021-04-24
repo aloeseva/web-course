@@ -30,28 +30,43 @@
 
 package webcourses.webcourse.controller;
 
-import java.util.Collections;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 import webcourses.webcourse.entity.User;
-import webcourses.webcourse.entity.enums.Role;
-import webcourses.webcourse.repos.UserRepo;
+import webcourses.webcourse.service.serviceImplementation.UserServImpl;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 /**
  * Rest implementation of Registration controller.
  *
  * @since 0.0.1
  */
-@RestController
+@Controller
 @SuppressWarnings("PMD")
-public class RegistrationController {
+public class GeneralController {
+    private final UserServImpl userServ;
+
+//    private UserRepo userRepo;
+
     @Autowired
-    private UserRepo userRepo;
+    public GeneralController(UserServImpl userServ) {
+        this.userServ = userServ;
+    }
 
     private static final String reg = "registration";
+
+    @GetMapping("/")
+    public String welcome() {
+        return "general/welcome";
+    }
 
     @GetMapping("/registration")
     public String registration() {
@@ -59,18 +74,34 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(final User user, final Map<String, Object> model) {
-        final User userFromDb = userRepo.findByUsername(user.getUsername());
+    public String addUser(
+            @RequestParam("password2") String passwordConfirm,
+            @Valid User user,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
 
-        if (userFromDb != null) {
-            model.put("message", "User exists!");
-            return reg;
+        if (isConfirmEmpty) {
+            model.addAttribute("password2Error", "Password confirmation cannot be empty");
         }
 
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        userRepo.save(user);
+        if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
+            model.addAttribute("passwordError", "Passwords are different!");
+        }
 
+        if (isConfirmEmpty || bindingResult.hasErrors()) {
+            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+
+            model.mergeAttributes(errors);
+
+            return "general/register";
+        }
+
+        if (!userServ.addUser(user)) {
+            model.addAttribute("usernameError", "User exists!");
+            return "general/register";
+        }
 
         return "redirect:/login";
     }

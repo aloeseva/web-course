@@ -31,8 +31,15 @@
 package webcourses.webcourse.service;
 
 import java.util.List;
-import webcourses.webcourse.entity.Course;
+import java.util.Set;
 import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.Test;
 
 public interface LessonServ {
+
+    List<Lesson> getAllLessons();
+
+    void saveLesson(Lesson lesson);
+
+    Set<Test> getAllLessonsTests(Lesson lesson);
 }

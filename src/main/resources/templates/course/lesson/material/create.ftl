@@ -1,10 +1,14 @@
+<#import "../../../macro/headerMacro.ftl" as h>
+<#import "../../../macro/footerMacro.ftl" as f>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Create material</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
@@ -13,30 +17,26 @@
     <script src="{{ url_for('static', filename='js/header.js') }}"></script>
     <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/course/lesson/material/createMaterial.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/course/lesson/material/createMaterial.css') }}">
 </head>
 <body>
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
             <form class="material" method="POST"
-                  action="{{ url_for("create_material", course_id=course.id, lesson_id=lesson.id) }}"
+                  action="/courses/${course.id}/lesson/${lesson.id}/create/material"
                   enctype="multipart/form-data">
 
-
-                <label  class="material__label">Название файла:</label>
+                <label class="material__label">Название файла:</label>
                 <input
                         type="text"
                         class="material__input"
-                        name="material_name"
+                        name="materialName"
                         id="material_name"
                         placeholder="Material name"
                 >
@@ -49,14 +49,16 @@
                         name="file"
                         id="file"
                 >
+                <input type="hidden" value="${_csrf.token}" name="_csrf" />
 
                 <button type="submit" class="material__btn">Добавить</button>
-                <a class="back" href="{{ url_for('lesson_home_page', course_id=course.id, lesson_id=lesson.id) }}">Назад</a>
+                <a class="back"
+                   href="/courses/${course.id}/lesson/${lesson.id}">Назад</a>
             </form>
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 

@@ -27,35 +27,45 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package webcourses.webcourse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package webcourses.webcourse.service.serviceImplementation;
 
-/**
- * Entry point for launch spring boot.
- *
- * @since 0.0.1
- */
-@SpringBootApplication
-@SuppressWarnings({"PMD"})
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import webcourses.webcourse.entity.Course;
+import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.repos.CourseRepo;
+import webcourses.webcourse.service.CourseServ;
 
-public class WebCourseApplication {
-    /**
-     * Logger for this class.
-     */
-//    private static final Logger LOGGER =
-//        LoggerFactory.getLogger(WebCourseApplication.class);
-    /**
-     * Entry point.
-     *
-     * @param args Arguments.
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(WebCourseApplication.class, args);
-//        LOGGER.info("Example log from {}", WebCourseApplication.class.getSimpleName());
+@Service
+public class CourseServImpl implements CourseServ {
+    private final CourseRepo courseRepo;
+
+    @Autowired
+    public CourseServImpl(CourseRepo courseRepo) {
+        this.courseRepo = courseRepo;
     }
 
+    @Override
+    public List<Course> getAllCourses() {
+        return courseRepo.findAll();
+    }
+
+    @Override
+    public Optional<Course> findById(Long id) {
+        return courseRepo.findById(id);
+    }
+
+    @Override
+    public List<Course> findByName(String name) {
+        return courseRepo.findByName(name);
+    }
+
+    @Override
+    public Set<Lesson> getAllLessons(Course course) {
+        return course.getLessons();
+    }
 }

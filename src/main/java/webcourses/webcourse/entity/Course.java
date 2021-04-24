@@ -65,6 +65,10 @@ public class Course {
     @ManyToMany(mappedBy = "createdCourses")
     private Set<User> authors = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Set<Lesson> lessons = new HashSet<>();
+
     public Set<Lesson> getLessons() {
         return lessons;
     }
@@ -72,10 +76,6 @@ public class Course {
     public void setLessons(Set<Lesson> lessons) {
         this.lessons = lessons;
     }
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn
-    private Set<Lesson> lessons = new HashSet<>();
 
     public Set<User> getAuthors() {
         return authors;

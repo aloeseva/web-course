@@ -1,5 +1,6 @@
 <#import "../../macro/headerMacro.ftl" as h>
 <#import "../../macro/footerMacro.ftl" as f>
+<#import "../../macro/headGeneral.ftl" as g>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,16 +8,10 @@
     <meta charset="UTF-8">
     <title>Create lesson</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
-          rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
-    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+    <@g.head />
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/course/lesson/createLesson.css') }}">
+    <link rel="stylesheet"
+          href="static/css/course/lesson/createLesson.css">
 </head>
 <body>
 
@@ -27,16 +22,15 @@
     <div class="content">
         <div class="container">
 
-            <div class="lesson__courseName">{{ course.name }}</div>
+            <div class="lesson__courseName">${course.name}</div>
 
-            <form class="lesson" method="POST" action="{{ url_for("create_lesson", course_id=course.id) }}">
-
+            <form class="lesson" method="POST" action="/courses/${course.id}/lesson/create">
 
                 <label class="lesson__label">Название урока</label>
                 <input
                         type="text"
                         class="lesson__input"
-                        name="lesson_name"
+                        name="lessonName"
                         id="lesson_name"
                         placeholder="Введение"
                 >
@@ -46,7 +40,7 @@
                 <input
                         type="text"
                         class="lesson__input"
-                        name="lesson_description"
+                        name="lessonDescription"
                         id="description"
                         placeholder="Первый урок курса"
                 >
@@ -56,13 +50,14 @@
                 <input
                         type="text"
                         class="lesson__input"
-                        name="lesson_difficulty"
+                        name="lessonDifficulty"
                         id="difficulty"
                         placeholder="1"
                 >
 
 
-                <input hidden type="text" name="courseId" value="{{ course.id }}">
+                <input hidden type="text" name="courseId" value="${course.id}">
+                <input type="hidden" value="${_csrf.token}" name="_csrf" />
 
                 <button type="submit" class="lesson__btn">Создать</button>
                 <a href="{{ url_for('course_home_page', course_id = course.id) }}">Назад</a>

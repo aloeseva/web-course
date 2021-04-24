@@ -27,35 +27,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package webcourses.webcourse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package webcourses.webcourse.service;
 
-/**
- * Entry point for launch spring boot.
- *
- * @since 0.0.1
- */
-@SpringBootApplication
-@SuppressWarnings({"PMD"})
+import java.util.Optional;
+import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.Material;
 
-public class WebCourseApplication {
-    /**
-     * Logger for this class.
-     */
-//    private static final Logger LOGGER =
-//        LoggerFactory.getLogger(WebCourseApplication.class);
-    /**
-     * Entry point.
-     *
-     * @param args Arguments.
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(WebCourseApplication.class, args);
-//        LOGGER.info("Example log from {}", WebCourseApplication.class.getSimpleName());
-    }
+public interface MaterialServ {
+    Optional<Material> getAllMaterials(Lesson lesson);
 
+    void save(Material material);
 }

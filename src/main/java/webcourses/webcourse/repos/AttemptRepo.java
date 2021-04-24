@@ -28,43 +28,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.service;
+package webcourses.webcourse.repos;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.repository.JpaRepository;
+import webcourses.webcourse.entity.Attempt;
 import webcourses.webcourse.entity.Course;
-import webcourses.webcourse.entity.Lesson;
-import webcourses.webcourse.repos.CourseRepo;
+import webcourses.webcourse.entity.Test;
+import webcourses.webcourse.entity.User;
 
-@Service
-public class CourseServImpl implements CourseServ{
-    private final CourseRepo courseRepo;
-
-    @Autowired
-    public CourseServImpl(CourseRepo courseRepo) {
-        this.courseRepo = courseRepo;
-    }
-
-    @Override
-    public List<Course> getAllCourses() {
-        return courseRepo.findAll();
-    }
-
-    @Override
-    public Optional<Course> findById(Long id) {
-        return courseRepo.findById(id);
-    }
-
-    @Override
-    public List<Course> findByName(String name) {
-        return courseRepo.findByName(name);
-    }
-
-    @Override
-    public Set<Lesson> getAllLessons(Course course) {
-        return course.getLessons();
-    }
+public interface AttemptRepo extends JpaRepository<Course, Long> {
+    Attempt findByIdAndId(User user, Test test);
 }

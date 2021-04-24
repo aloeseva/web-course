@@ -30,6 +30,8 @@
 
 package webcourses.webcourse.entity;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,6 +39,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -54,6 +57,42 @@ public class Lesson {
     private String name;
     private String description;
     private Integer difficulty;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Set<Test> tests = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Course course;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private Set<Material> materials = new HashSet<>();
+
+    public Set<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(Set<Material> materials) {
+        this.materials = materials;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Set<Test> getTests() {
+        return tests;
+    }
+
+    public void setTests(Set<Test> tests) {
+        this.tests = tests;
+    }
 
     public Long getId() {
         return id;

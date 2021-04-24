@@ -38,7 +38,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import webcourses.webcourse.service.UserService;
+import webcourses.webcourse.service.datailsService.UserService;
 
 /**
  * Web security config class.
@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/registration", "/static/**").permitAll()
+                .antMatchers("/", "/register", "/static/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()

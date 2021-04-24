@@ -54,7 +54,6 @@ public class Material {
     private String name;
     private String fileName;
     private String extension;
-    private String pathToFile;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
@@ -90,14 +89,6 @@ public class Material {
 
     public void setExtension(final String extension) {
         this.extension = extension;
-    }
-
-    public String getPathToFile() {
-        return pathToFile;
-    }
-
-    public void setPathToFile(final String pathToFile) {
-        this.pathToFile = pathToFile;
     }
 
     public Lesson getLesson() {

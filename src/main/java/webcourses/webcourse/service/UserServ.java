@@ -31,6 +31,8 @@
 package webcourses.webcourse.service;
 
 import java.util.List;
+import java.util.Map;
+
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
 
@@ -41,6 +43,8 @@ public interface UserServ {
     void deleteUser(User user);
 
     void saveUser(User user);
+
+//    void saveUser(User user, String username, Map<String, String> form);
 
     User findByName(String userName);
 

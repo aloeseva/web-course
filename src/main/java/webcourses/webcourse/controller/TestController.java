@@ -30,13 +30,48 @@
 
 package webcourses.webcourse.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import webcourses.webcourse.entity.Course;
+import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.Test;
+import webcourses.webcourse.service.serviceImplementation.UserServImpl;
 
 /**
  * Rest implementation of Test controller.
  *
  * @since 0.0.1
  */
-@RestController
+@Controller
 public class TestController {
+    private final UserServImpl userServ;
+
+    @Autowired
+    public TestController(UserServImpl userServ) {
+        this.userServ = userServ;
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
+    @PostMapping("/courses/{course}/lesson/{lesson}/test/create")
+    public String creatTest(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @RequestParam("testName") String testName,
+            @RequestParam("expDate") String expDate
+    ) {
+
+        if (userServ.isCreator(course)) {
+            Test test = new Test();
+            test.setName(testName);
+            test.setExpDate(expDate);
+            test.setLesson(lesson);
+        }
+        return "redirect:/courses/"+ course.getId() +"/lesson/" + lesson.getId();
+    }
+
+
 }

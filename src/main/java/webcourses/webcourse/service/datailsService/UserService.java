@@ -27,35 +27,32 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package webcourses.webcourse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+package webcourses.webcourse.service.datailsService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import webcourses.webcourse.repos.UserRepo;
 
 /**
- * Entry point for launch spring boot.
+ * Service class for user.
  *
  * @since 0.0.1
  */
-@SpringBootApplication
-@SuppressWarnings({"PMD"})
+@Service
+public class UserService implements UserDetailsService {
+    private final UserRepo userrepo;
 
-public class WebCourseApplication {
-    /**
-     * Logger for this class.
-     */
-//    private static final Logger LOGGER =
-//        LoggerFactory.getLogger(WebCourseApplication.class);
-    /**
-     * Entry point.
-     *
-     * @param args Arguments.
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(WebCourseApplication.class, args);
-//        LOGGER.info("Example log from {}", WebCourseApplication.class.getSimpleName());
+    @Autowired
+    public UserService(UserRepo userrepo) {
+        this.userrepo = userrepo;
     }
 
+    @Override
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        return this.userrepo.findByUsername(username);
+    }
 }

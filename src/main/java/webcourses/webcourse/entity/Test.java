@@ -30,15 +30,7 @@
 
 package webcourses.webcourse.entity;
 
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Entity of Test.
@@ -53,11 +45,19 @@ public class Test {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Date expDate;
+    private String expDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Lesson lesson;
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public void setLesson(Lesson test) {
+        this.lesson = test;
+    }
 
     public Long getId() {
         return id;
@@ -75,19 +75,11 @@ public class Test {
         this.name = name;
     }
 
-    public Date getExpDate() {
+    public String getExpDate() {
         return expDate;
     }
 
-    public void setExpDate(final Date expDate) {
+    public void setExpDate(final String expDate) {
         this.expDate = expDate;
-    }
-
-    public Lesson getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(final Lesson lesson) {
-        this.lesson = lesson;
     }
 }

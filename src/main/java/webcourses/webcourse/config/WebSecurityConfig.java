@@ -30,15 +30,14 @@
 
 package webcourses.webcourse.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import webcourses.webcourse.service.datailsService.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import webcourses.webcourse.service.serviceImplementation.UserServImpl;
 
 /**
  * Web security config class.
@@ -49,14 +48,19 @@ import webcourses.webcourse.service.datailsService.UserService;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UserService userService;
+    private final UserServImpl userService;
+    private final PasswordEncoder passwordEncoder;
+
+    public WebSecurityConfig(UserServImpl userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/register", "/static/**").permitAll()
+                .antMatchers("/", "/registration", "/welcome", "/courses", "/css/**", "/js/**", "/icon/**", "/image/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
@@ -68,9 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
-            .passwordEncoder(NoOpPasswordEncoder.getInstance());
-
+                .passwordEncoder(passwordEncoder);
     }
 }

@@ -3,9 +3,9 @@
 <#macro login path isRegisterForm>
     <form class="loginForm" method="POST" action="${path}">
 
-        <label class="form__label">Login</label>
+        <label class="form__label">Логин</label>
 
-        <input class="login__input ${(usernameError??)?string('is-invalid', '')}" type="text" name="login_input"
+        <input class="login__input ${(usernameError??)?string('is-invalid', '')}" type="text" name="username"
                id="login_input"
                value="<#if user??>${user.username}</#if>">
         <#if usernameError??>
@@ -14,59 +14,60 @@
             </div>
         </#if>
 
-        <label class="form__label">Password</label>
+        <label class="form__label">Пароль</label>
 
         <div class="password">
             <input class="password__input ${(passwordError??)?string('is-invalid', '')}" type="password"
-                   name="password_input" id="password_input">
-            <#if passwordError??>
-                <div class="invalid-feedback">
-                    ${passwordError}
-                </div>
-            </#if>
+                   name="password" id="password_input">
+
             <i class="fas fa-eye-slash password__icon" id="showPassword" onclick="showHidePassword()"
                style="display: none"></i>
             <i class="fas fa-eye password__icon" id="hidePassword" onclick="showHidePassword()"></i>
         </div>
-
+        <#if passwordError??>
+            <div class="invalid-feedback">
+                ${passwordError}
+            </div>
+        </#if>
 
         <#if isRegisterForm>
-            <label class="form__label">Почта</label>
-            <input value="<#if user??>${user.email}</#if>" type="email"
-                   class="login__input ${(emailError??)?string('is-invalid', '')}" id="email_input"
-                   name="email_input"
-                   aria-describedby="emailHelp" placeholder="some@some.com" required>
-            <#if emailError??>
-                <div class="invalid-feedback">
-                    ${emailError}
-                </div>
-            </#if>
-
             <label class="form__label">Повтор пароля</label>
 
             <div class="password">
                 <input type="password" class="password__input ${(password2Error??)?string('is-invalid', '')}"
                        name="password2"
                        id="password_input_conf" required>
-                <#if password2Error??>
-                    <div class="invalid-feedback">
-                        ${password2Error}
-                    </div>
-                </#if>
+
                 <i class="fas fa-eye-slash password__icon" id="showPasswordConf"
                    onclick="showHidePassword()"
                    style="display: none"></i>
                 <i class="fas fa-eye password__icon" id="hidePasswordConf" onclick="showHidePassword()"></i>
             </div>
+            <#if password2Error??>
+                <div class="invalid-feedback">
+                    ${password2Error}
+                </div>
+            </#if>
+
+            <label class="form__label">Почта</label>
+            <input value="<#if user??>${user.email}</#if>" type="email"
+                   class="login__input ${(emailError??)?string('is-invalid', '')}" id="email_input"
+                   name="email"
+                   aria-describedby="emailHelp" placeholder="some@some.com" required>
+            <#if emailError??>
+                <div class="invalid-feedback">
+                    ${emailError}
+                </div>
+            </#if>
         </#if>
 
         <input type="hidden" name="_csrf" value="${_csrf.token}"/>
 
-        <#if !isRegisterForm><a class="registrationLink" href="/registration">Не
-            зарегестрированны?</a></#if>
-
         <button class="loginButton"
                 type="submit"><#if isRegisterForm>Create<#else>Sign In</#if></button>
+
+        <#if !isRegisterForm><a class="registrationLink" href="/registration">Не
+            зарегестрированны?</a></#if>
     </form>
 
 </#macro>

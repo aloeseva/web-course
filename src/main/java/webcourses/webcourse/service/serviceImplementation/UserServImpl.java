@@ -30,9 +30,6 @@
 
 package webcourses.webcourse.service.serviceImplementation;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,16 +43,23 @@ import webcourses.webcourse.entity.enums.Role;
 import webcourses.webcourse.repos.UserRepo;
 import webcourses.webcourse.service.UserServ;
 
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
 @Service
-public class UserServImpl implements UserServ, UserDetailsService {
+public class UserServImpl implements UserServ, UserDetailsService
+{
     private final UserRepo userRepo;
     private final AuthenticationFacade facade;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServImpl(UserRepo userRepo, AuthenticationFacade facade) {
+    public UserServImpl(UserRepo userRepo, AuthenticationFacade facade, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.facade = facade;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -109,7 +113,7 @@ public class UserServImpl implements UserServ, UserDetailsService {
         Set<User> creators = course.getAuthors();
         boolean isCreator = false;
         for (User creator :
-            creators) {
+                creators) {
             if (creator.getId().equals(getCurrUser().getId())) {
                 isCreator = true;
             }
@@ -124,14 +128,17 @@ public class UserServImpl implements UserServ, UserDetailsService {
             return false;
         }
 
+        Date date = new Date();
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRegistrationDate(date);
 
         userRepo.save(user);
 
         return true;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

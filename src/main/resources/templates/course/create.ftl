@@ -10,7 +10,7 @@
 
     <@g.head />
 
-    <link rel="stylesheet" href="static/css/course/createCourse.css">
+    <link rel="stylesheet" href="/css/course/createCourse.css">
 </head>
 <body>
 

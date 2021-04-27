@@ -11,7 +11,7 @@
 
     <@g.head />
 
-    <link rel="stylesheet" href="static/css/course/allCourses.css">
+    <link rel="stylesheet" href="/css/course/allCourses.css">
 </head>
 <body>
 

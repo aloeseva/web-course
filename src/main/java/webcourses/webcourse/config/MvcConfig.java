@@ -49,17 +49,23 @@ public class MvcConfig implements WebMvcConfigurer {
     private String imgPath;
 
     public void addViewControllers(final ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/login").setViewName("general/login");
     }
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**")
-            .addResourceLocations("file:/" + imgPath + "/");
+                .addResourceLocations("file:/" + imgPath + "/");
         registry.addResourceHandler("/file/**")
-            .addResourceLocations("file:/" + uploadPath + "/");
-        registry.addResourceHandler("/static/**")
-            .addResourceLocations("classpath:/static/css/");
+                .addResourceLocations("file:/" + uploadPath + "/");
+        registry.addResourceHandler("/css/**")
+                .addResourceLocations("classpath:/static/css/");
+        registry.addResourceHandler("/js/**")
+                .addResourceLocations("classpath:/static/js/");
+        registry.addResourceHandler("/icon/**")
+                .addResourceLocations("classpath:/static/icon/");
+        registry.addResourceHandler("/image/**")
+                .addResourceLocations("classpath:/static/image/");
     }
 
 //    @Override

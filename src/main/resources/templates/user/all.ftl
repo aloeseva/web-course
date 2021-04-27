@@ -10,7 +10,7 @@
 
     <@g.head />
 
-    <link rel="stylesheet" href="static/css/allUsers.css">
+    <link rel="stylesheet" href="/css/allUsers.css">
 
     <!-- bootstrap -->
 

@@ -11,12 +11,12 @@
     <meta property="og:title" content="EWA"/>
     <meta property="og:description" content="Education Web App"/>
     <meta property="og:image"
-          content="static/image/ewa.jpg"/>
+          content="/image/ewa.jpg"/>
     <meta property="og:type" content="website"/>
 
     <@g.head />
 
-    <link rel="stylesheet" href="static/css/welcome.css">
+    <link rel="stylesheet" href="/css/welcome.css">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
                     Демонстрационный тест
                 </a>
 
-                <a href="{{ url_for('all_courses') }}" class="welcome__btn">Все курсы</a>
+                <a href="/courses" class="welcome__btn">Все курсы</a>
 
             </div>
         </div>

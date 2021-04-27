@@ -61,16 +61,16 @@ public class GeneralController {
         this.userServ = userServ;
     }
 
-    private static final String reg = "registration";
+    private static final String reg = "register";
 
-    @GetMapping("/")
+    @GetMapping("/welcome")
     public String welcome() {
         return "general/welcome";
     }
 
     @GetMapping("/registration")
     public String registration() {
-        return reg;
+        return "general/register";
     }
 
     @PostMapping("/registration")

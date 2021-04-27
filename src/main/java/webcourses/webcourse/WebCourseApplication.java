@@ -29,8 +29,6 @@
  */
 package webcourses.webcourse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -41,21 +39,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @SuppressWarnings({"PMD"})
-
 public class WebCourseApplication {
-    /**
-     * Logger for this class.
-     */
-//    private static final Logger LOGGER =
-//        LoggerFactory.getLogger(WebCourseApplication.class);
-    /**
-     * Entry point.
-     *
-     * @param args Arguments.
-     */
-    public static void main(final String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(WebCourseApplication.class, args);
-//        LOGGER.info("Example log from {}", WebCourseApplication.class.getSimpleName());
     }
 
 }

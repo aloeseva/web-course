@@ -1,5 +1,5 @@
 <#include "../macro/security.ftl">
-<#import "../macro/login.ftl" as l>
+<#import "loginMacro.ftl" as l>
 
 <#macro header>
     <header class="header">

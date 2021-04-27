@@ -30,10 +30,7 @@
 
 package webcourses.webcourse.entity;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
@@ -48,6 +45,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import webcourses.webcourse.entity.enums.Role;
@@ -64,11 +65,17 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank(message = "Username cannot be empty")
     private String username;
+    @Email(message = "Email is not correct")
+    @NotBlank(message = "Email cannot be empty")
     private String email;
+    @NotBlank(message = "Password cannot be empty")
     private String password;
     private boolean active;
+    @Nullable
     private String firstName;
+    @Nullable
     private String lastName;
     private Date registrationDate;
 
@@ -93,6 +100,14 @@ public class User implements UserDetails {
         inverseJoinColumns = {@JoinColumn(name = "courseId")}
     )
     Set<Course> createdCourses = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
 
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);

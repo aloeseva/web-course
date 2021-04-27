@@ -11,7 +11,7 @@
 
     <@g.head />
 
-    <link rel="stylesheet" href="static/css/userHomePage.css">
+    <link rel="stylesheet" href="/css/userHomePage.css">
 </head>
 <body>
 

@@ -53,7 +53,7 @@
                 <button type="submit" class="course__btn">Создать</button>
             </form>
 
-            <a href="/courses/all" class="back">Назад</a>
+            <a href="/courses" class="back">Назад</a>
         </div>
     </div>
 

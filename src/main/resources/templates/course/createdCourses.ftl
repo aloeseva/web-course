@@ -1,6 +1,5 @@
 <#import "../macro/headerMacro.ftl" as h>
 <#import "../macro/footerMacro.ftl" as f>
-<#include "../macro/security.ftl">
 <#import "../macro/headGeneral.ftl" as g>
 
 <!DOCTYPE html>
@@ -34,11 +33,11 @@
 
                             <div class="course__img">
 
-                                <#if course.imageName!>
-                                    <img src="/static/image/${course.imageName}"
+                                <#if course.imageName??>
+                                    <img src="/image/${course.imageName}"
                                          alt="course">
                                 <#else>
-                                    <img src="/static/image/course.png" alt="course">
+                                    <img src="/image/course.png" alt="course">
                                 </#if>
 
                             </div>

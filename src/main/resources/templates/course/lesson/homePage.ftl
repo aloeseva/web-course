@@ -36,7 +36,7 @@
                     Сложность: ${lesson.difficulty}
                 </div>
 
-                <a class="back__btn" href="/course/${course.id}/home">Назад</a>
+                <a class="back__btn" href="/courses/${course.id}/home">Назад</a>
 
                 <#if isCreator>
                     <a class="create_btn"
@@ -61,7 +61,7 @@
                         </div>
                         <div class="">
                             <a class="material__btn"
-                               href="/courses/${course.id}/lesson/${lesson.id}/download/material/${material.id}">
+                               href="/material/${material.id}">
                                 Скачать
                             </a>
                         </div>
@@ -75,7 +75,7 @@
                 <#list tests as test>
                     <div class="test">
                         <div class="test__name">
-                            ${test.name}
+                            ${test.test.name}
                         </div>
 
                         <#--                    <div class="test__type">#}-->
@@ -84,22 +84,22 @@
                         <#--                    </div>-->
 
                         <div class="test__exp">
-                            Последний срок сдачи: ${test.expDate}
+                            Последний срок сдачи: ${test.test.expDate}
                         </div>
 
                         <a class="test__btn"
-                           href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}">
+                           href="/courses/${course.id}/lesson/${lesson.id}/test/${test.test.id}">
                             Решить
                         </a>
                         <#if isCreator>
                             <a class="test__btn"
-                               href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/result/all">
+                               href="/courses/${course.id}/lesson/${lesson.id}/test/${test.test.id}/result/all">
                                 Результаты
                             </a>
                         <#else>
-                            <#if solvedTests.get(test.id)>
+                            <#if test.solved>
                                 <a class="test__btn"
-                                   href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/result/${1}">
+                                   href="/courses/${course.id}/lesson/${lesson.id}/test/${test.test.id}/result/${1}">
                                     Мои результаты
                                 </a>
                             </#if>

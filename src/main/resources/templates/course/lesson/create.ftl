@@ -60,7 +60,7 @@
                 <input type="hidden" value="${_csrf.token}" name="_csrf" />
 
                 <button type="submit" class="lesson__btn">Создать</button>
-                <a href="{{ url_for('course_home_page', course_id = course.id) }}">Назад</a>
+                <a href="/courses/${course.id}/home" class="back">Назад</a>
             </form>
 
         </div>

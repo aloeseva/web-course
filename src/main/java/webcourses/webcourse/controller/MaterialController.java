@@ -30,9 +30,8 @@
 
 package webcourses.webcourse.controller;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,12 +44,8 @@ import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.entity.Material;
 import webcourses.webcourse.service.MaterialServ;
-import webcourses.webcourse.service.serviceImplementation.UserServImpl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
-import java.util.UUID;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Rest implementation of Material controller.
@@ -59,75 +54,43 @@ import java.util.UUID;
  */
 @Controller
 public class MaterialController {
-    private final UserServImpl userServ;
     private final MaterialServ materialServ;
 
     @Autowired
-    public MaterialController(UserServImpl userServ, MaterialServ materialServ) {
-        this.userServ = userServ;
+    public MaterialController(MaterialServ materialServ) {
         this.materialServ = materialServ;
     }
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
-    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @GetMapping("/courses/{course}/lesson/{lesson}/create/material")
-    public String addMaterailsPage(
-        @PathVariable Course course,
-        @PathVariable Lesson lesson,
-        Model model) {
-        model.addAttribute("course", course);
-        model.addAttribute("lesson", lesson);
-        return "course/lesson/material/create";
+    public String addMaterialsPage(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            Model model
+    ) {
+        return materialServ.addMaterial(course, lesson, model);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
-    @PostMapping("/courses/{course}/lesson/{lesson}/create/material")
-    public String addMaterails(
-        @PathVariable Course course,
-        @PathVariable Lesson lesson,
-        @RequestParam String materialName,
-        @RequestParam("file") MultipartFile file
+    @GetMapping(
+            value = "/material/{material}",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    )
+    public void downloadMaterial(
+            HttpServletResponse response,
+            @PathVariable Material material
     ) {
+        materialServ.download(response, material);
+    }
 
-        if (userServ.isCreator(course)) {
-            Material material = new Material();
-            String fileName = file.getName();
-            if (materialName.equals("")) {
-                materialName = fileName;
-            }
-
-            String m_type = FilenameUtils.getExtension(fileName);
-            int nextMaterialId = lesson.getMaterials().size() + 1;
-            fileName = lesson.getId().toString() + '_' + nextMaterialId + '_' + fileName;
-
-            if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-                File uploadDir = new File(uploadPath);
-
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + fileName;
-
-                try {
-                    file.transferTo(new File(uploadPath + "/" + resultFileName));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                material.setName(materialName);
-                material.setFileName(resultFileName);
-                material.setExtension(m_type);
-                material.setLesson(lesson);
-            }
-
-            materialServ.save(material);
-        }
-
-        return "redirect:/courses/"+ course.getId() +"/lesson/" + lesson.getId() ;
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @PostMapping("/courses/{course}/lesson/{lesson}/create/material")
+    public String addMaterials(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @RequestParam String materialName,
+            @RequestParam("file") MultipartFile file
+    ) {
+        return materialServ.addMaterial(course, lesson, materialName, file);
     }
 
 }

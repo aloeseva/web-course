@@ -52,7 +52,7 @@ public class Result {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long resultValue;
-    private Float attempt;
+    private Long attempt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
@@ -78,11 +78,11 @@ public class Result {
         this.resultValue = resultValue;
     }
 
-    public Float getAttempt() {
+    public Long getAttempt() {
         return attempt;
     }
 
-    public void setAttempt(final Float attempt) {
+    public void setAttempt(final Long attempt) {
         this.attempt = attempt;
     }
 

@@ -30,19 +30,30 @@
 
 package webcourses.webcourse.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
+
+import java.util.List;
 
 public interface CourseServ {
 
     List<Course> getAllCourses();
 
-    Optional<Course> findById(Long id);
+    List<Lesson> getAllLessons(Course course);
 
-    List<Course> findByName(String name);
+    String allCourses(String filter, Model model);
 
-    Set<Lesson> getAllLessons(Course course);
+    String userCourses(Model model);
+
+    String showCourse(Course course, Model model);
+
+    String createCourse(String name, String description, MultipartFile file);
+
+    String courseHomePage(Course course, Model model);
+
+    String enroll(Course course);
+
+    String createdCourses(Model model);
 }

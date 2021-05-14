@@ -23,13 +23,11 @@
     <div class="content">
         <div class="container">
 
-            <form class="user" method="POST" action="/user">
+            <form class="user" method="POST" action="/user/edit">
 
-                <#if isTeacher && isAdmin>
-                    <div>
-                        <a href="/createdCourses" class="createdCourses"> Созданные
-                            курсы</a>
-                    </div>
+                <#if isAdmin || isTeacher>
+                    <a href="/courses/createdCourses" class="createdCourses"> Созданные
+                        курсы</a>
                 </#if>
 
                 <label class="user__label">Login</label>
@@ -39,7 +37,7 @@
                         name="login_change"
                         id="login_change"
                         placeholder="Login"
-                        value=${name}
+                        value=${username}
                 >
 
                 <label class="user__label">E-mail</label>
@@ -49,7 +47,7 @@
                         name="email_change"
                         id="email_change"
                         placeholder="E-mail"
-                        value=${user.email}
+                        value=${email}
                 >
 
                 <label class="user__label">Registration date</label>
@@ -65,9 +63,13 @@
                         name="first_name_change"
                         id="first_name_change"
                         placeholder="Иван"
-                        value=${ user.firstName!}
+                        value=
+                        <#if firstName??>
+                            ${ firstName}
+                        <#else >
+                            ${ firstName!}
+                        </#if>
                 >
-
 
                 <label class="user__label">Фамилия</label>
                 <input
@@ -76,7 +78,12 @@
                         name="last_name_change"
                         id="last_name_change"
                         placeholder="Иванов"
-                        value=${ user.lastName!}
+                        value=
+                        <#if lastName??>
+                            ${ lastName}
+                        <#else >
+                            ${ lastName!}
+                        </#if>
                 >
 
                 <input type="hidden" value="${user.id}" name="userId">

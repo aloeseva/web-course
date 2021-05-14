@@ -28,10 +28,13 @@
 
     .footer__row {
         flex-direction: column-reverse;
+        margin-top: 10px;
+        height: 60px;
     }
 
     .footer__copyright {
         font-size: 10px;
+        margin-bottom: 10px;
     }
 
     .footer__contacts__link {

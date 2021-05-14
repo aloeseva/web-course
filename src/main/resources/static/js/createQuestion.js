@@ -25,7 +25,7 @@ function addOption() {
     newOption.id = "option" + count;
     newOption.innerHTML =
         "<input class=\"question__cb\" type=\"checkbox\" id=\"cb" + count + "\" name=\"cb" + count + "\" value=\"" + count + "\"> " +
-        "<input class=\"question__input\" type=\"text\" id=\"text" + count + "\" name=\"text" + count + "\" placeholder=\"Answer\">";
+        "<input class=\"question__input\" type=\"text\" id=\"text" + count + "\" name=\"text" + count + "\" placeholder=\"Ответ\">";
     rootElement.appendChild(newOption);
 }
 

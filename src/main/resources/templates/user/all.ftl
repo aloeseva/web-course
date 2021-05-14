@@ -34,14 +34,14 @@
                             Login:
                         </div>
                         <div class="col">
-                            {{ user.login }}
+                            ${ user.username }
                         </div>
 
                         <div class="col">
                             Email:
                         </div>
                         <div class="col">
-                            {{ user.email }}
+                            ${ user.email }
                         </div>
 
                         <div class="col">
@@ -49,17 +49,17 @@
                         </div>
 
                         <Form class="form-inline" method="POST" action="/user/changeRole">
-                            <input hidden name="userId" value="${user.id}">
                             <input type="hidden" value="${_csrf.token}" name="_csrf"/>
 
                             <div class="col">
                                 <#list roles as role>
-                                    ${role.name}
-                                    <input class="form-control" type="checkbox" value="${role.name}"
-                                           name="roles"
+                                    ${role}
+                                    <input class="form-control" type="checkbox"
+                                           name="${role}"
                                             ${user.roles?seq_contains(role)?string("checked", "")}>
                                 </#list>
                             </div>
+                            <input hidden name="userId" value="${user.id}">
                             <input type="submit" value="Изменить роль" class="user__btn">
                         </Form>
 

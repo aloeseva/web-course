@@ -30,12 +30,15 @@
 
 package webcourses.webcourse.service.serviceImplementation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import webcourses.webcourse.auth.AuthenticationFacade;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
@@ -43,14 +46,15 @@ import webcourses.webcourse.entity.enums.Role;
 import webcourses.webcourse.repos.UserRepo;
 import webcourses.webcourse.service.UserServ;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServImpl implements UserServ, UserDetailsService
 {
+    private static final String RETURN_ALL_USER_VIEW = "user/all";
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServImpl.class);
+
     private final UserRepo userRepo;
     private final AuthenticationFacade facade;
     private final PasswordEncoder passwordEncoder;
@@ -63,39 +67,42 @@ public class UserServImpl implements UserServ, UserDetailsService
     }
 
     @Override
-    public List<User> getAllUsers() {
-        //todo: добавить логирование
-        //todo: подумать о перехвате ошибок
-        return userRepo.findAll();
+    public String getAllUsers(Model model) {
+        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("roles", Role.values());
+        return RETURN_ALL_USER_VIEW;
     }
 
     @Override
-    public void deleteUser(User user) {
+    public String deleteUser(User user) {
         userRepo.delete(user);
+        return "redirect:/" + RETURN_ALL_USER_VIEW;
     }
-
-//    @Override
-//    public void saveUser(User user, String username, Map<String, String> form) {
-//        user.setUsername(username);
-//
-//        Set<String> roles = Arrays.stream(Role.values())
-//                .map(Role::name)
-//                .collect(Collectors.toSet());
-//
-//        user.getRoles().clear();
-//
-//        for (String key : form.keySet()) {
-//            if (roles.contains(key)) {
-//                user.getRoles().add(Role.valueOf(key));
-//            }
-//        }
-//
-//        userRepo.save(user);
-//    }
 
     @Override
     public void saveUser(User user) {
         userRepo.save(user);
+    }
+
+    @Override
+    public String editUser(Map<String, String> form, User user) {
+        user.setUsername(form.get("login_change"));
+        user.setEmail(form.get("email_change"));
+        String firstName = form.get("first_name_change");
+        String lastName = form.get("last_name_change");
+        if (!firstName.equals("")) {
+            user.setFirstName(firstName);
+        } else {
+            user.setFirstName(null);
+        }
+        if (!lastName.equals("")) {
+            user.setLastName(lastName);
+        } else {
+            user.setLastName(null);
+        }
+
+        saveUser(user);
+        return "redirect:/user";
     }
 
     @Override
@@ -104,8 +111,40 @@ public class UserServImpl implements UserServ, UserDetailsService
     }
 
     @Override
+    public String userPage(Model model) {
+        User user = findByName(getCurrUser().getUsername());
+        boolean isAdmin = user.isAdmin();
+        boolean isTeacher = user.isTeacher();
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("email", user.getEmail());
+        model.addAttribute("firstName", user.getFirstName());
+        model.addAttribute("lastName", user.getLastName());
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isTeacher", isTeacher);
+        return "user/homePage";
+    }
+
+    @Override
     public User getCurrUser() {
         return userRepo.findByUsername(facade.getAuthentication().getName());
+    }
+
+    @Override
+    public String changeRole(Map<String, String> form, User user) {
+        final Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+
+        user.getRoles().clear();
+
+        for (final String key : form.keySet()) {
+            if (roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
+
+        saveUser(user);
+        return "redirect:/" + RETURN_ALL_USER_VIEW;
     }
 
     @Override
@@ -121,10 +160,11 @@ public class UserServImpl implements UserServ, UserDetailsService
         return isCreator;
     }
 
+    @Override
     public boolean addUser(User user) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
 
-        if (userFromDb != null) {
+        if (userFromDb != null || user.getUsername().equals("")) {
             return false;
         }
 
@@ -145,7 +185,11 @@ public class UserServImpl implements UserServ, UserDetailsService
         User user = userRepo.findByUsername(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+            try {
+                throw new UsernameNotFoundException("User not found");
+            } catch (UsernameNotFoundException ex) {
+                LOGGER.error("Error while searching user", ex);
+            }
         }
 
         return user;

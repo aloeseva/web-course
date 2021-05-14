@@ -31,7 +31,10 @@
 package webcourses.webcourse.repos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
+
+import java.util.Optional;
 
 /**
  * Interface for implement return of User by User name.
@@ -40,4 +43,5 @@ import webcourses.webcourse.entity.User;
  */
 public interface UserRepo extends JpaRepository<User, Long> {
     User findByUsername(String username);
+
 }

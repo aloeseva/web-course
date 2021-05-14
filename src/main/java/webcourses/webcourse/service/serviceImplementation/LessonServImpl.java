@@ -30,22 +30,35 @@
 
 package webcourses.webcourse.service.serviceImplementation;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.Material;
 import webcourses.webcourse.entity.Test;
+import webcourses.webcourse.entity.dto.SolvedTest;
 import webcourses.webcourse.repos.LessonRepo;
-import webcourses.webcourse.service.LessonServ;
+import webcourses.webcourse.service.*;
 
 @Service
 public class LessonServImpl implements LessonServ {
     private final LessonRepo lessonRepo;
+    private final UserServ userServ;
+    private final TestServ testServ;
+    private final AttemptServ attemptServ;
+    private final MaterialServ materialServ;
 
     @Autowired
-    public LessonServImpl(LessonRepo lessonRepo) {
+    public LessonServImpl(LessonRepo lessonRepo, UserServ userServ, TestServ testServ, AttemptServ attemptServ, MaterialServ materialServ) {
         this.lessonRepo = lessonRepo;
+        this.userServ = userServ;
+        this.testServ = testServ;
+        this.attemptServ = attemptServ;
+        this.materialServ = materialServ;
     }
 
 
@@ -60,7 +73,49 @@ public class LessonServImpl implements LessonServ {
     }
 
     @Override
-    public Set<Test> getAllLessonsTests(Lesson lesson) {
-        return lesson.getTests();
+    public String creatLesson(Course course, Model model) {
+
+        model.addAttribute("course", course);
+
+        return "course/lesson/create";
+    }
+
+    @Override
+    public String creatLesson(Course course, String name, String description, Integer difficulty) {
+        if (userServ.isCreator(course)) {
+            Lesson lesson = new Lesson();
+            lesson.setName(name);
+            lesson.setDescription(description);
+            lesson.setDifficulty(difficulty);
+            lesson.setCourse(course);
+            saveLesson(lesson);
+        }
+        return "redirect:/courses/" + course.getId() + "/home";
+    }
+
+    @Override
+    public String homePage(Lesson lesson, Course course, Model model) {
+        List<Test> tests = testServ.getAllTests(lesson);
+        List<SolvedTest> solvedTests = new LinkedList<>();
+
+        boolean isSolved;
+        for (Test test :
+                tests) {
+            isSolved = attemptServ.getTestAttempt(userServ.getCurrUser(), test) > 0;
+            SolvedTest solvedTest = new SolvedTest();
+            solvedTest.setSolved(isSolved);
+            solvedTest.setTest(test);
+            solvedTests.add(solvedTest);
+        }
+
+        List<Material> materials = materialServ.getAllMaterials(lesson);
+
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("course", course);
+        model.addAttribute("isCreator", userServ.isCreator(course));
+        model.addAttribute("tests", solvedTests);
+        model.addAttribute("materials", materials);
+
+        return "course/lesson/homePage";
     }
 }

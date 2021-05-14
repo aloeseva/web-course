@@ -31,6 +31,7 @@
 package webcourses.webcourse.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,17 +40,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
-import webcourses.webcourse.entity.Material;
-import webcourses.webcourse.entity.Test;
-import webcourses.webcourse.service.AttemptServ;
 import webcourses.webcourse.service.LessonServ;
-import webcourses.webcourse.service.MaterialServ;
-import webcourses.webcourse.service.UserServ;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * Rest implementation of Lesson controller.
@@ -58,67 +49,36 @@ import java.util.Set;
  */
 @Controller
 public class LessonController {
-    private final UserServ userServ;
     private final LessonServ lessonServ;
-    private final AttemptServ attemptServ;
-    private final MaterialServ materialServ;
 
     @Autowired
-    public LessonController(UserServ userServ, LessonServ lessonServ, AttemptServ attemptServ, MaterialServ materialServ) {
-        this.userServ = userServ;
+    public LessonController(LessonServ lessonServ) {
         this.lessonServ = lessonServ;
-        this.attemptServ = attemptServ;
-        this.materialServ = materialServ;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @GetMapping("/courses/{course}/lesson/create")
     public String creatLessonPage(@PathVariable Course course, Model model) {
-        model.addAttribute("course", course);
 
-        return "course/lesson/create";
+        return lessonServ.creatLesson(course, model);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping("/courses/{course}/lesson/create")
     public String creatLesson(@PathVariable Course course,
                               @RequestParam String lessonName,
                               @RequestParam String lessonDescription,
                               @RequestParam Integer lessonDifficulty
     ) {
-        if (userServ.isCreator(course)) {
-            Lesson lesson = new Lesson();
-            lesson.setName(lessonName);
-            lesson.setDescription(lessonDescription);
-            lesson.setDifficulty(lessonDifficulty);
-            lesson.setCourse(course);
-            lessonServ.saveLesson(lesson);
-        }
-        return "redirect:/courses/{course}/home";
+        return lessonServ.creatLesson(course, lessonName, lessonDescription, lessonDifficulty);
     }
 
     @GetMapping("/courses/{course}/lesson/{lesson}")
     public String lessonHomePage(
-        @PathVariable Lesson lesson,
-        Model model,
-        @PathVariable Course course) {
-        Set<Test> tests = lessonServ.getAllLessonsTests(lesson);
-        Map<Long, Boolean> solvedTests = new HashMap<>();
-
-        boolean isSolved;
-        for (Test test :
-            tests) {
-            isSolved = attemptServ.getTestAttempt(userServ.getCurrUser(), test) > 0;
-            solvedTests.put(test.getId(), isSolved);
-        }
-
-        Optional<Material> materials = materialServ.getAllMaterials(lesson);
-
-        model.addAttribute("lesson", lesson);
-        model.addAttribute("course", course);
-        model.addAttribute("isCreator", userServ.isCreator(course));
-        model.addAttribute("solvedTests", solvedTests);
-        model.addAttribute("tests", tests);
-        model.addAttribute("materials", materials);
-
-        return "course/lesson/homePage";
+            @PathVariable Lesson lesson,
+            @PathVariable Course course,
+            Model model
+    ) {
+        return lessonServ.homePage(lesson, course, model);
     }
 }

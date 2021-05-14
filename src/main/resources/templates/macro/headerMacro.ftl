@@ -2,13 +2,14 @@
 <#import "loginMacro.ftl" as l>
 
 <#macro header>
+
     <header class="header">
         <div class="container">
             <div class="header__row">
-                <a href="/welcome" class="header__logo__1">
+                <a href="/" class="header__logo__1">
                     EWA | Educational web app
                 </a>
-                <div href="/welcome" class="header__logo__2">
+                <div href="/" class="header__logo__2">
                     EWA
                 </div>
                 <div class="right__part__menu_btn" onclick="onMenuClick()">
@@ -46,8 +47,15 @@
 
 
                                 <div class="user__dropdown" id="user__dropdown">
-                                    <span><a id="Profile" href="/user">Профиль</a></span>
-                                    <a href="/logout">Выйти</a>
+                                    <a id="Profile" href="/user">Профиль</a>
+                                    <form action="/logout" method="post">
+                                        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                        <button type="submit">
+                                            Выйти</button>
+                                    </form>
+                                    <#if isAdmin>
+                                        <a class="nav-link" href="/user/all">User list</a>
+                                    </#if>
                                 </div>
                             </div>
                         <#else>

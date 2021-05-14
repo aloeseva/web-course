@@ -29,7 +29,7 @@
                     <input class="course__btn" type="submit" value="Поиск">
                 </form>
 
-                <#if isTeacher>
+                <#if isAdmin || isTeacher>
                     <a class="create_course_btn" href="/courses/create">Создать курс</a>
                 </#if>
 
@@ -40,11 +40,11 @@
 
                             <div class="course__img">
 
-                                <#if course.image_name!>
-                                    <img src="/static/image/${course.imageName}"
+                                <#if course.imageName??>
+                                    <img src="/image/${course.imageName}"
                                          alt="course">
                                 <#else>
-                                    <img src="/static/image/course.png" alt="course">
+                                    <img src="/image/course.png" alt="course">
                                 </#if>
 
                             </div>

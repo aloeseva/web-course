@@ -36,6 +36,6 @@ import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Test;
 import webcourses.webcourse.entity.User;
 
-public interface AttemptRepo extends JpaRepository<Course, Long> {
-    Attempt findByIdAndId(User user, Test test);
+public interface AttemptRepo extends JpaRepository<Attempt, Long> {
+    Attempt findByUserAndTest(User user, Test test);
 }

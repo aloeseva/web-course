@@ -30,42 +30,167 @@
 
 package webcourses.webcourse.service.serviceImplementation;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
+import webcourses.webcourse.entity.User;
 import webcourses.webcourse.repos.CourseRepo;
+import webcourses.webcourse.repos.LessonRepo;
 import webcourses.webcourse.service.CourseServ;
+import webcourses.webcourse.service.UserServ;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 @Service
 public class CourseServImpl implements CourseServ {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseServImpl.class);
+
     private final CourseRepo courseRepo;
+    private final LessonRepo lessonRepo;
+    private final UserServ userServ;
 
     @Autowired
-    public CourseServImpl(CourseRepo courseRepo) {
+    public CourseServImpl(CourseRepo courseRepo, LessonRepo lessonRepo, UserServ userServ) {
         this.courseRepo = courseRepo;
+        this.lessonRepo = lessonRepo;
+        this.userServ = userServ;
     }
+
+    @Value("${img.path}")
+    private String uploadPath;
 
     @Override
     public List<Course> getAllCourses() {
         return courseRepo.findAll();
     }
 
-    @Override
-    public Optional<Course> findById(Long id) {
-        return courseRepo.findById(id);
+    public boolean isEnrolled(Course course, User user) {
+        boolean result = false;
+        for (Course c : user.getCourses()) {
+            if (c.getName().equals(course.getName())) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
-    public List<Course> findByName(String name) {
-        return courseRepo.findByName(name);
+    public List<Lesson> getAllLessons(Course course) {
+        return lessonRepo.findAllByCourse(course);
     }
 
     @Override
-    public Set<Lesson> getAllLessons(Course course) {
-        return course.getLessons();
+    public String allCourses(String filter, Model model) {
+        List<Course> courses = new LinkedList<>();
+
+        if (filter != null && !filter.isEmpty()) {
+            for (Course course :
+                    getAllCourses()) {
+                if (course.getName().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT))) {
+                    courses.add(course);
+                }
+            }
+        } else {
+            courses = getAllCourses();
+        }
+
+        model.addAttribute("courses", courses);
+        model.addAttribute("filter", filter);
+
+        return "course/all";
+    }
+
+    @Override
+    public String userCourses(Model model) {
+        model.addAttribute("courses", userServ.getCurrUser().getCourses());
+
+        return "course/myCourses";
+    }
+
+    @Override
+    public String showCourse(Course course, Model model) {
+        boolean enroll = isEnrolled(course, userServ.getCurrUser());
+        model.addAttribute("course", course);
+        model.addAttribute("enrolled", enroll);
+        return "course/info";
+    }
+
+    @Override
+    public String createCourse(String name, String description, MultipartFile file) {
+        Course course = new Course();
+        String filename = file.getOriginalFilename();
+
+        if (!StringUtils.isEmpty(filename)) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                if (uploadDir.mkdir()) {
+                 LOGGER.info("Path for course image was successful create.");
+                } else {
+                    LOGGER.warn("Path creation was not successful.");
+                }
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + filename;
+
+            try {
+                file.transferTo(new File(uploadPath + "/" + resultFileName));
+                filename = resultFileName;
+                LOGGER.info("Course image was received.");
+            } catch (IOException e) {
+                LOGGER.error("Something went wrong.", e);
+            }
+        } else {
+            filename = "course.png";
+        }
+
+        course.setName(name);
+        course.setDescription(description);
+        course.setImageName(filename);
+
+        userServ.getCurrUser().setCreatedCourses(course);
+        userServ.getCurrUser().setCourses(course);
+        userServ.saveUser(userServ.getCurrUser());
+
+        return "redirect:/courses";
+    }
+
+    @Override
+    public String courseHomePage(Course course, Model model) {
+        List<Lesson> lessons = getAllLessons(course);
+        model.addAttribute("is_creator", userServ.isCreator(course));
+        model.addAttribute("course", course);
+        model.addAttribute("lessons", lessons);
+
+        return "course/homePage";
+    }
+
+    @Override
+    public String enroll(Course course) {
+        userServ.getCurrUser().setCourses(course);
+        userServ.saveUser(userServ.getCurrUser());
+
+        return "redirect:/courses/" + course.getId() + "/home";
+    }
+
+    @Override
+    public String createdCourses(Model model) {
+        model.addAttribute("user", userServ.getCurrUser());
+
+        return "course/createdCourses";
     }
 }

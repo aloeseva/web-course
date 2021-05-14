@@ -17,9 +17,10 @@
     justify-content: center;
     align-items: center;
 
-    padding: 75px 100px;
+    padding: 24px 24px;
     border-radius: 50px;
     background: linear-gradient(90deg, #6f4495, #242582);
+    margin: 40px;
 }
 
 .form__label {

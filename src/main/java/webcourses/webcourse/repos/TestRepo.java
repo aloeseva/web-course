@@ -30,9 +30,12 @@
 
 package webcourses.webcourse.repos;
 
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.entity.Test;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface for implement return of Test by Test name.
@@ -41,4 +44,6 @@ import webcourses.webcourse.entity.Test;
  */
 public interface TestRepo extends JpaRepository<Test, Long> {
     Optional<Test> findByName(String name);
+
+    List<Test> findAllByLesson(Lesson lesson);
 }

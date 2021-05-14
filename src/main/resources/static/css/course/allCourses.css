@@ -44,7 +44,7 @@
 }
 
 .course {
-    background: url("/static/image/ggg.png");
+    background: url("/image/ggg.png");
     width: 30%;
     height: 250px;
     margin: 10px;

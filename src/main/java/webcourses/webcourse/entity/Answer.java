@@ -30,14 +30,8 @@
 
 package webcourses.webcourse.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Entity of Answer.
@@ -52,12 +46,31 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String text;
-    private Float val;
+    private Long val;
     private String aType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn
     private Question question;
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+    private Set<Result> results;
+
+    public String getaType() {
+        return aType;
+    }
+
+    public void setaType(String aType) {
+        this.aType = aType;
+    }
+
+    public Set<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
+    }
 
     public Long getId() {
         return id;
@@ -75,11 +88,11 @@ public class Answer {
         this.text = text;
     }
 
-    public Float getVal() {
+    public Long getVal() {
         return val;
     }
 
-    public void setVal(final Float val) {
+    public void setVal(final Long val) {
         this.val = val;
     }
 

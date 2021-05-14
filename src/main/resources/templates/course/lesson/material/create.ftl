@@ -1,5 +1,6 @@
 <#import "../../../macro/headerMacro.ftl" as h>
 <#import "../../../macro/footerMacro.ftl" as f>
+<#import "../../../macro/headGeneral.ftl" as g>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,18 +8,11 @@
     <meta charset="UTF-8">
     <title>Create material</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
-          rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
-    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+    <@g.head />
+
 
     <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/course/lesson/material/createMaterial.css') }}">
+          href="/css/course/lesson/material/createMaterial.css">
 </head>
 <body>
 

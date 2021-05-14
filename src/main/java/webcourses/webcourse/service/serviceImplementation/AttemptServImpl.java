@@ -32,6 +32,7 @@ package webcourses.webcourse.service.serviceImplementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webcourses.webcourse.entity.Attempt;
 import webcourses.webcourse.entity.Test;
 import webcourses.webcourse.entity.User;
 import webcourses.webcourse.repos.AttemptRepo;
@@ -47,7 +48,21 @@ public class AttemptServImpl implements AttemptServ {
     }
 
     @Override
-    public Long getTestAttempt(User user, Test test) {
-        return attemptRepo.findByIdAndId(user, test).getCount();
+    public Integer getTestAttempt(User user, Test test) {
+        long attempts = 0;
+        if (attemptRepo.findByUserAndTest(user, test) != null) {
+            attempts = attemptRepo.findByUserAndTest(user, test).getCount();
+        }
+        return Math.toIntExact(attempts);
+    }
+
+    @Override
+    public Attempt getAttempt(User user, Test test) {
+        return attemptRepo.findByUserAndTest(user, test);
+    }
+
+    @Override
+    public void save(Attempt attempt) {
+        attemptRepo.save(attempt);
     }
 }

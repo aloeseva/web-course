@@ -28,8 +28,7 @@
         <div class="container">
             <div class="authorizationForm">
                 <div class="authorizationForm__row">
-                    ${message?ifExists}
-                    <@l.login "/login" true />
+                    <@l.login "/registration" true />
                 </div>
             </div>
         </div>

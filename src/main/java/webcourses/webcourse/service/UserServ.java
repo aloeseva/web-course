@@ -30,25 +30,31 @@
 
 package webcourses.webcourse.service;
 
-import java.util.List;
-import java.util.Map;
-
+import org.springframework.ui.Model;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
 
+import java.util.Map;
+
 public interface UserServ {
 
-    List<User> getAllUsers();
+    String getAllUsers(Model model);
 
-    void deleteUser(User user);
+    String deleteUser(User user);
 
     void saveUser(User user);
 
-//    void saveUser(User user, String username, Map<String, String> form);
+    boolean addUser(User user);
+
+    String editUser(Map<String, String> form, User user);
 
     User findByName(String userName);
 
+    String userPage(Model model);
+
     User getCurrUser();
+
+    String changeRole( Map<String, String> form, User user);
 
     boolean isCreator(Course course);
 }

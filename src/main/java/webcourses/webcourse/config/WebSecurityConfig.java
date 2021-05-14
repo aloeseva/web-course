@@ -60,14 +60,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/registration", "/welcome", "/courses", "/css/**", "/js/**", "/icon/**", "/image/**").permitAll()
+                .antMatchers("/", "/registration", "/courses", "/file/**", "/css/**", "/js/**", "/icon/**", "/image/**").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
                 .loginPage("/login")
+                .defaultSuccessUrl("/", true)
                 .permitAll()
             .and()
+                .exceptionHandling()
+                .accessDeniedPage("/403")
+            .and()
                 .logout()
+                .logoutSuccessUrl("/login")
+                .deleteCookies("JSESSIONID")
                 .permitAll();
     }
 

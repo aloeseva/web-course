@@ -30,12 +30,23 @@
 
 package webcourses.webcourse.service;
 
-import java.util.Optional;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.entity.Material;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
 public interface MaterialServ {
-    Optional<Material> getAllMaterials(Lesson lesson);
+    List<Material> getAllMaterials(Lesson lesson);
 
     void save(Material material);
+
+    void download(HttpServletResponse response, Material material);
+
+    String addMaterial(Course course, Lesson lesson, Model model);
+
+    String addMaterial(Course course, Lesson lesson, String name, MultipartFile file);
 }

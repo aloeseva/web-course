@@ -30,10 +30,11 @@
 
 package webcourses.webcourse.service;
 
-import java.util.List;
-import java.util.Set;
+import org.springframework.ui.Model;
+import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
-import webcourses.webcourse.entity.Test;
+
+import java.util.List;
 
 public interface LessonServ {
 
@@ -41,5 +42,10 @@ public interface LessonServ {
 
     void saveLesson(Lesson lesson);
 
-    Set<Test> getAllLessonsTests(Lesson lesson);
+    String creatLesson(Course course, Model model);
+
+    String creatLesson(Course course, String name, String description, Integer difficulty);
+
+    String homePage(Lesson lesson, Course course, Model model);
+
 }

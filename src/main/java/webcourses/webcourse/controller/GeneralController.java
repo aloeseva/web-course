@@ -33,16 +33,14 @@ package webcourses.webcourse.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import webcourses.webcourse.entity.User;
-import webcourses.webcourse.service.serviceImplementation.UserServImpl;
+import webcourses.webcourse.service.serviceImplementation.GeneralServImpl;
 
 import javax.validation.Valid;
-import java.util.Map;
 
 /**
  * Rest implementation of Registration controller.
@@ -52,18 +50,14 @@ import java.util.Map;
 @Controller
 @SuppressWarnings("PMD")
 public class GeneralController {
-    private final UserServImpl userServ;
-
-//    private UserRepo userRepo;
+    private final GeneralServImpl generalServ;
 
     @Autowired
-    public GeneralController(UserServImpl userServ) {
-        this.userServ = userServ;
+    public GeneralController(GeneralServImpl generalServ) {
+        this.generalServ = generalServ;
     }
 
-    private static final String reg = "register";
-
-    @GetMapping("/welcome")
+    @GetMapping("/")
     public String welcome() {
         return "general/welcome";
     }
@@ -80,29 +74,11 @@ public class GeneralController {
             BindingResult bindingResult,
             Model model
     ) {
-        boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
+        return generalServ.registration(passwordConfirm, user, model, bindingResult);
+    }
 
-        if (isConfirmEmpty) {
-            model.addAttribute("password2Error", "Password confirmation cannot be empty");
-        }
-
-        if (user.getPassword() != null && !user.getPassword().equals(passwordConfirm)) {
-            model.addAttribute("passwordError", "Passwords are different!");
-        }
-
-        if (isConfirmEmpty || bindingResult.hasErrors()) {
-            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
-
-            model.mergeAttributes(errors);
-
-            return "general/register";
-        }
-
-        if (!userServ.addUser(user)) {
-            model.addAttribute("usernameError", "User exists!");
-            return "general/register";
-        }
-
-        return "redirect:/login";
+    @GetMapping("/403")
+    public String invalidRoute403() {
+        return "error/fourZeroThreeError";
     }
 }

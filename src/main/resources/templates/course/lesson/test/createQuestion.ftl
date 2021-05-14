@@ -1,37 +1,30 @@
+<#import "../../../macro/headerMacro.ftl" as h>
+<#import "../../../macro/footerMacro.ftl" as f>
+<#import "../../../macro/headGeneral.ftl" as g>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Create question</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/general.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
-          rel="stylesheet">
-    <script src="{{ url_for('static', filename='js/header.js') }}"></script>
-    <script src="https://kit.fontawesome.com/8cf596884a.js" crossorigin="anonymous"></script>
+    <@g.head />
 
-    <script src="{{ url_for('static', filename='js/createQuestion.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/course/lesson/test/createQuestion.css') }}">
+    <script src="/js/createQuestion.js"></script>
+    <link rel="stylesheet" href="/css/course/lesson/test/createQuestion.css">
 </head>
 <body>
 
 <div class="wrapper">
 
-    {% from 'macro/headerMacro.html' import header %}
-    {% from 'macro/footerMacro.html' import footer %}
-
-    {{ header(current_user) }}
-
+    <@h.header />
 
     <div class="content">
         <div class="container">
             <div class="question">
 
                 <form class="mt-3" method="POST"
-                      action="{{ url_for("create_question", course_id=course.id, lesson_id=lesson.id, test_id=test.id) }}"
+                      action="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/question/create"
                       enctype="multipart/form-data"
                 >
 
@@ -93,17 +86,17 @@
                             <input class="question__input" type="text" id="text1" name="text1" placeholder="Ответ">
                         </div>
                     </div>
-
+                    <input type="hidden" value="${_csrf.token}" name="_csrf" />
 
                     <button type="submit" class="question__btn">Создать</button>
-                    <a class="question__btn" href="{{ url_for("test_home_page",course_id=course.id, lesson_id=lesson.id, test_id=test.id) }}">Назад</a>
+                    <a class="question__btn" href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}">Назад</a>
                 </form>
 
             </div>
         </div>
     </div>
 
-    {{ footer(current_user) }}
+    <@f.footer />
 
 </div>
 </body>

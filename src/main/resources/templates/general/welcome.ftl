@@ -31,7 +31,7 @@
                     Добро пожаловать в образовательное веб приложение или просто EWA!
                 </div>
 
-                <a href="{{ url_for( 'test_home_page', course_id=1, lesson_id=1, test_id=1 ) }}" class="welcome__btn">
+                <a href="/courses/${2}/lesson/${3}/test/${4}" class="welcome__btn">
                     Демонстрационный тест
                 </a>
 

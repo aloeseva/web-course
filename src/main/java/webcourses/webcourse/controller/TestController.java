@@ -33,13 +33,16 @@ package webcourses.webcourse.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import webcourses.webcourse.entity.Course;
-import webcourses.webcourse.entity.Lesson;
-import webcourses.webcourse.entity.Test;
-import webcourses.webcourse.service.serviceImplementation.UserServImpl;
+import webcourses.webcourse.entity.*;
+import webcourses.webcourse.service.TestServ;
+import webcourses.webcourse.service.serviceImplementation.TestServImpl;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Rest implementation of Test controller.
@@ -48,14 +51,24 @@ import webcourses.webcourse.service.serviceImplementation.UserServImpl;
  */
 @Controller
 public class TestController {
-    private final UserServImpl userServ;
+    private final TestServ testServ;
 
     @Autowired
-    public TestController(UserServImpl userServ) {
-        this.userServ = userServ;
+    public TestController(TestServImpl testServ) {
+        this.testServ = testServ;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN' || 'TEACHER')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/create")
+    public String creatTestPage(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            Model model
+    ) {
+        return testServ.creatTest(course, lesson, model);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping("/courses/{course}/lesson/{lesson}/test/create")
     public String creatTest(
             @PathVariable Course course,
@@ -63,14 +76,127 @@ public class TestController {
             @RequestParam("testName") String testName,
             @RequestParam("expDate") String expDate
     ) {
+        return testServ.creatTest(course, lesson, testName, expDate);
+    }
 
-        if (userServ.isCreator(course)) {
-            Test test = new Test();
-            test.setName(testName);
-            test.setExpDate(expDate);
-            test.setLesson(lesson);
-        }
-        return "redirect:/courses/"+ course.getId() +"/lesson/" + lesson.getId();
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}")
+    public String testHomePage(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            Model model
+    ) {
+        return testServ.homePage(course, lesson, test, model);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}/question/create")
+    public String createQuestionPage(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            Model model
+    ) {
+        return testServ.creatQuestion(course, lesson, test, model);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @PostMapping("/courses/{course}/lesson/{lesson}/test/{test}/question/create")
+    public String createQuestion(
+            HttpServletRequest request,
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            @RequestParam("question_text") String questionText,
+            @RequestParam("max_val") String maxValue,
+            @RequestParam("question_type") String questionType,
+            @RequestParam("count") String count
+    ) {
+        return testServ.creatQuestion(request, course, lesson, test, questionText, maxValue, questionType, count);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}/question/{question}/edit")
+    public String editQuestionPage(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            @PathVariable Question question,
+            Model model
+    ) {
+        return testServ.editQuestion(course, lesson, test, question, model);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @PostMapping("/courses/{course}/lesson/{lesson}/test/{test}/question/{question}/edit")
+    public String editQuestion(
+            HttpServletRequest request,
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            @PathVariable Question question,
+            @RequestParam("question_text") String questionText,
+            @RequestParam("max_val") String maxValue,
+            @RequestParam("question_type") String questionType
+    ) {
+        return testServ.editQuestion(request, course, lesson, test, question, questionText, maxValue, questionType);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @GetMapping("/courses/{course}lesson/{lesson}/test/{test}/question/{question}/delete")
+    public String deleteQuestion(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            @PathVariable Question question
+    ) {
+        return testServ.deleteQuestion(course, lesson, test, question);
+    }
+
+    @PostMapping("/courses/{course}/lesson/{lesson}/test/{test}/result")
+    public String testCheck(
+            HttpServletRequest request,
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test
+    ) {
+        return testServ.check(request, course, lesson, test);
+    }
+
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}/result/{attempt}")
+    public String result(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            @PathVariable int attempt,
+            Model model
+    ) {
+
+        return testServ.result(course, lesson, test, attempt, model);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}/result/all")
+    public String resultForTeacher(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            Model model
+    ) {
+        return testServ.resultForTeacher(course, lesson, test, model);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
+    @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}/user/{user}/result/teacher/{attempt}")
+    public String userResultForTeacher(
+            @PathVariable Course course,
+            @PathVariable Lesson lesson,
+            @PathVariable Test test,
+            @PathVariable User user,
+            @PathVariable int attempt,
+            Model model
+    ) {
+        return testServ.userResultForTeacher(course, lesson, test, user, attempt, model);
     }
 
 

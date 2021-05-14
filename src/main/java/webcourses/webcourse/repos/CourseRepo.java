@@ -31,8 +31,11 @@
 package webcourses.webcourse.repos;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import webcourses.webcourse.entity.Course;
+import webcourses.webcourse.entity.User;
 
 /**
  * Interface for implement return of Course by Course name.
@@ -41,4 +44,6 @@ import webcourses.webcourse.entity.Course;
  */
 public interface CourseRepo extends JpaRepository<Course, Long> {
     List<Course> findByName(String name);
+
+    Optional<Course> findCourseByAuthors(User user);
 }

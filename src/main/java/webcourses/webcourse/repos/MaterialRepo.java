@@ -30,6 +30,7 @@
 
 package webcourses.webcourse.repos;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import webcourses.webcourse.entity.Lesson;
@@ -43,4 +44,6 @@ import webcourses.webcourse.entity.Material;
 public interface
 MaterialRepo extends JpaRepository<Material, Long> {
     Optional<Material>  findByLesson(Lesson lesson);
+
+    List<Material> findAllByLesson(Lesson lesson);
 }

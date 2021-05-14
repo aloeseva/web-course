@@ -39,7 +39,7 @@
 
                 <#if is_creator>
                     <a class="create_lesson_btn"
-                       href="{{ url_for( 'create_lesson',course_id=course.id) }}">
+                       href="/courses/${course.id}/lesson/create">
                         Создать урок
                     </a>
                 </#if>

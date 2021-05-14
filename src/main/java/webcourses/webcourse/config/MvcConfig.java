@@ -67,10 +67,4 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/image/**")
                 .addResourceLocations("classpath:/static/image/");
     }
-
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new RedirectInterceptor());
-//    }
-
 }

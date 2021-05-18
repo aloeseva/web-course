@@ -50,8 +50,9 @@ public class AttemptServImpl implements AttemptServ {
     @Override
     public Integer getTestAttempt(User user, Test test) {
         long attempts = 0;
-        if (attemptRepo.findByUserAndTest(user, test) != null) {
-            attempts = attemptRepo.findByUserAndTest(user, test).getCount();
+        Attempt attempt = attemptRepo.findByUserAndTest(user, test);
+        if (attempt != null) {
+            attempts = attempt.getCount();
         }
         return Math.toIntExact(attempts);
     }

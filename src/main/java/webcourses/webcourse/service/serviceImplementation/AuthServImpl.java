@@ -37,24 +37,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import webcourses.webcourse.controller.ControllerUtils;
 import webcourses.webcourse.entity.User;
 import webcourses.webcourse.service.GeneralServ;
 import webcourses.webcourse.service.UserServ;
+import webcourses.webcourse.util.ControllerUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class GeneralServImpl implements GeneralServ {
+public class AuthServImpl implements GeneralServ {
     private static final String RETURN_REGISTER_VIEW = "general/register";
     private static final String RETURN_LOGIN_VIEW = "redirect:/login";
-    private static final Logger LOGGER = LoggerFactory.getLogger(GeneralServImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthServImpl.class);
 
     private final UserServ userServ;
 
     @Autowired
-    public GeneralServImpl(UserServImpl userServ) {
+    public AuthServImpl(UserServImpl userServ) {
         this.userServ = userServ;
     }
 
@@ -71,10 +71,6 @@ public class GeneralServImpl implements GeneralServ {
         if (isInvalid) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
             attributes.putAll(errors);
-            for (String error :
-                    errors.values()) {
-                LOGGER.error(error);
-            }
             resultView = RETURN_REGISTER_VIEW;
         } else {
             resultView = validateUser(user, attributes, resultView);
@@ -99,6 +95,7 @@ public class GeneralServImpl implements GeneralServ {
 
     private boolean isConfirmEmpty(String passwordConfirm, Map<String, String> attributes) {
         boolean isConfirmEmpty = StringUtils.isEmpty(passwordConfirm);
+
         if (isConfirmEmpty) {
             attributes.put("password2Error", "Password confirmation cannot be empty");
         }
@@ -108,6 +105,7 @@ public class GeneralServImpl implements GeneralServ {
 
     private boolean validatePassword(String passwordConfirm, Map<String, String> attributes, String userPassword) {
         boolean isPasswordValidate = true;
+
         if (userPassword != null && !userPassword.equals(passwordConfirm)) {
             attributes.put("passwordError", "Passwords are different!");
             isPasswordValidate = false;
@@ -115,6 +113,7 @@ public class GeneralServImpl implements GeneralServ {
         } else {
             LOGGER.info("Password was successfully confirmed.");
         }
+
         return isPasswordValidate;
     }
 }

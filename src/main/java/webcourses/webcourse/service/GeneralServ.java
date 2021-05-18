@@ -35,6 +35,6 @@ import org.springframework.validation.BindingResult;
 import webcourses.webcourse.entity.User;
 
 public interface GeneralServ {
-    String registration(String passwordConfirm, User user, Model model, BindingResult bindingResult);
 
+    String registration(String passwordConfirm, User user, Model model, BindingResult bindingResult);
 }

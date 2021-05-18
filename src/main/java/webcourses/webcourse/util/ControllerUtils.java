@@ -28,57 +28,36 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.controller;
+package webcourses.webcourse.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import webcourses.webcourse.entity.User;
-import webcourses.webcourse.service.serviceImplementation.GeneralServImpl;
+import org.springframework.validation.FieldError;
 
-import javax.validation.Valid;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-/**
- * Rest implementation of Registration controller.
- *
- * @since 0.0.1
- */
-@Controller
-@SuppressWarnings("PMD")
-public class GeneralController {
-    private final GeneralServImpl generalServ;
+public final class ControllerUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ControllerUtils.class);
 
-    @Autowired
-    public GeneralController(GeneralServImpl generalServ) {
-        this.generalServ = generalServ;
+    private ControllerUtils() {
     }
 
-    @GetMapping("/")
-    public String welcome() {
-        return "general/welcome";
+    public static Map<String, String> getErrors(BindingResult bindingResult) {
+        Collector<FieldError, ?, Map<String, String>> collector = Collectors.toMap(
+                fieldError -> fieldError.getField() + "Error",
+                ControllerUtils::getErrorMassage
+        );
+
+        return bindingResult.getFieldErrors().stream().collect(collector);
     }
 
-    @GetMapping("/registration")
-    public String registration() {
-        return "general/register";
-    }
+    private static String getErrorMassage(FieldError fieldError) {
+        String defaultMessage = fieldError.getDefaultMessage();
+        LOGGER.error(defaultMessage);
 
-    @PostMapping("/registration")
-    public String addUser(
-            @RequestParam("password2") String passwordConfirm,
-            @Valid User user,
-            BindingResult bindingResult,
-            Model model
-    ) {
-        return generalServ.registration(passwordConfirm, user, model, bindingResult);
-    }
-
-    @GetMapping("/403")
-    public String invalidRoute403() {
-        return "error/fourZeroThreeError";
+        return defaultMessage;
     }
 }

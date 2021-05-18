@@ -42,9 +42,9 @@ public interface LessonServ {
 
     void saveLesson(Lesson lesson);
 
-    String creatLesson(Course course, Model model);
+    String createLesson(Course course, Model model);
 
-    String creatLesson(Course course, String name, String description, Integer difficulty);
+    String createLesson(Course course, String name, String description, Integer difficulty);
 
     String homePage(Lesson lesson, Course course, Model model);
 

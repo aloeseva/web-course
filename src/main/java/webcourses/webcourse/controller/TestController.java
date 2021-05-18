@@ -60,23 +60,23 @@ public class TestController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @GetMapping("/courses/{course}/lesson/{lesson}/test/create")
-    public String creatTestPage(
+    public String createTestPage(
             @PathVariable Course course,
             @PathVariable Lesson lesson,
             Model model
     ) {
-        return testServ.creatTest(course, lesson, model);
+        return testServ.createTest(course, lesson, model);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping("/courses/{course}/lesson/{lesson}/test/create")
-    public String creatTest(
+    public String createTest(
             @PathVariable Course course,
             @PathVariable Lesson lesson,
             @RequestParam("testName") String testName,
             @RequestParam("expDate") String expDate
     ) {
-        return testServ.creatTest(course, lesson, testName, expDate);
+        return testServ.createTest(course, lesson, testName, expDate);
     }
 
     @GetMapping("/courses/{course}/lesson/{lesson}/test/{test}")
@@ -97,7 +97,7 @@ public class TestController {
             @PathVariable Test test,
             Model model
     ) {
-        return testServ.creatQuestion(course, lesson, test, model);
+        return testServ.createQuestion(course, lesson, test, model);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
@@ -107,12 +107,12 @@ public class TestController {
             @PathVariable Course course,
             @PathVariable Lesson lesson,
             @PathVariable Test test,
-            @RequestParam("question_text") String questionText,
-            @RequestParam("max_val") String maxValue,
-            @RequestParam("question_type") String questionType,
+            @RequestParam("questionText") String questionText,
+            @RequestParam("maxVal") String maxValue,
+            @RequestParam("questionType") String questionType,
             @RequestParam("count") String count
     ) {
-        return testServ.creatQuestion(request, course, lesson, test, questionText, maxValue, questionType, count);
+        return testServ.createQuestion(request, course, lesson, test, questionText, maxValue, questionType, count);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
@@ -135,9 +135,9 @@ public class TestController {
             @PathVariable Lesson lesson,
             @PathVariable Test test,
             @PathVariable Question question,
-            @RequestParam("question_text") String questionText,
-            @RequestParam("max_val") String maxValue,
-            @RequestParam("question_type") String questionType
+            @RequestParam("questionText") String questionText,
+            @RequestParam("maxVal") String maxValue,
+            @RequestParam("questionType") String questionType
     ) {
         return testServ.editQuestion(request, course, lesson, test, question, questionText, maxValue, questionType);
     }

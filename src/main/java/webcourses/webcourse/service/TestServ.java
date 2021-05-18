@@ -37,17 +37,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface TestServ {
+
     List<Test> getAllTests(Lesson lesson);
 
-    String creatTest(Course course, Lesson lesson, Model model);
+    String createTest(Course course, Lesson lesson, Model model);
 
-    String creatTest(Course course, Lesson lesson, String name, String date);
+    String createTest(Course course, Lesson lesson, String name, String date);
 
     String homePage(Course course, Lesson lesson, Test test, Model model);
 
-    String creatQuestion(Course course, Lesson lesson, Test test, Model model);
+    String createQuestion(Course course, Lesson lesson, Test test, Model model);
 
-    String creatQuestion(HttpServletRequest request, Course course, Lesson lesson, Test test, String text, String maxValue, String type, String count);
+    String createQuestion(HttpServletRequest request, Course course, Lesson lesson, Test test, String text, String maxValue, String type, String count);
 
     String editQuestion(Course course, Lesson lesson, Test test, Question question, Model model);
 

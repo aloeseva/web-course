@@ -48,10 +48,10 @@ import webcourses.webcourse.service.UserServ;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServImpl implements CourseServ {
@@ -61,6 +61,9 @@ public class CourseServImpl implements CourseServ {
     private final LessonRepo lessonRepo;
     private final UserServ userServ;
 
+    @Value("${img.path}")
+    private String uploadPath;
+
     @Autowired
     public CourseServImpl(CourseRepo courseRepo, LessonRepo lessonRepo, UserServ userServ) {
         this.courseRepo = courseRepo;
@@ -68,15 +71,12 @@ public class CourseServImpl implements CourseServ {
         this.userServ = userServ;
     }
 
-    @Value("${img.path}")
-    private String uploadPath;
-
     @Override
     public List<Course> getAllCourses() {
         return courseRepo.findAll();
     }
 
-    public boolean isEnrolled(Course course, User user) {
+    private boolean isEnrolled(Course course, User user) {
         boolean result = false;
         for (Course c : user.getCourses()) {
             if (c.getName().equals(course.getName())) {
@@ -94,20 +94,16 @@ public class CourseServImpl implements CourseServ {
 
     @Override
     public String allCourses(String filter, Model model) {
-        List<Course> courses = new LinkedList<>();
 
-        if (filter != null && !filter.isEmpty()) {
-            for (Course course :
-                    getAllCourses()) {
-                if (course.getName().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT))) {
-                    courses.add(course);
-                }
-            }
-        } else {
-            courses = getAllCourses();
+        List<Course> allCourses = getAllCourses();
+
+        if (!StringUtils.isEmpty(filter)) {
+            allCourses = allCourses.stream().filter(
+                    course -> course.getName().toLowerCase(Locale.ROOT).contains(filter.toLowerCase(Locale.ROOT))
+            ).collect(Collectors.toList());
         }
 
-        model.addAttribute("courses", courses);
+        model.addAttribute("courses", allCourses);
         model.addAttribute("filter", filter);
 
         return "course/all";
@@ -131,14 +127,55 @@ public class CourseServImpl implements CourseServ {
     @Override
     public String createCourse(String name, String description, MultipartFile file) {
         Course course = new Course();
-        String filename = file.getOriginalFilename();
+        String filename = getFileNameByFile(file);
 
-        if (!StringUtils.isEmpty(filename)) {
+        course.setName(name);
+        course.setDescription(description);
+        course.setImageName(filename);
+
+        User currUser = userServ.getCurrUser();
+        currUser.setCreatedCourses(course);
+        currUser.setCourses(course);
+        userServ.saveUser(currUser);
+
+        return "redirect:/courses";
+    }
+
+    @Override
+    public String courseHomePage(Course course, Model model) {
+        List<Lesson> lessons = getAllLessons(course);
+        model.addAttribute("isCreator", userServ.isCreator(course));
+        model.addAttribute("course", course);
+        model.addAttribute("lessons", lessons);
+
+        return "course/homePage";
+    }
+
+    @Override
+    public String enroll(Course course) {
+        User currUser = userServ.getCurrUser();
+        currUser.setCourses(course);
+        userServ.saveUser(currUser);
+
+        return "redirect:/courses/" + course.getId() + "/home";
+    }
+
+    @Override
+    public String createdCourses(Model model) {
+        model.addAttribute("user", userServ.getCurrUser());
+
+        return "course/createdCourses";
+    }
+
+    private String getFileNameByFile(MultipartFile file) {
+        String filename = "course.png";
+
+        if (file != null && !StringUtils.isEmpty(file.getOriginalFilename())) {
             File uploadDir = new File(uploadPath);
 
             if (!uploadDir.exists()) {
                 if (uploadDir.mkdir()) {
-                 LOGGER.info("Path for course image was successful create.");
+                    LOGGER.info("Path for course image was successful create.");
                 } else {
                     LOGGER.warn("Path creation was not successful.");
                 }
@@ -154,43 +191,8 @@ public class CourseServImpl implements CourseServ {
             } catch (IOException e) {
                 LOGGER.error("Something went wrong.", e);
             }
-        } else {
-            filename = "course.png";
         }
 
-        course.setName(name);
-        course.setDescription(description);
-        course.setImageName(filename);
-
-        userServ.getCurrUser().setCreatedCourses(course);
-        userServ.getCurrUser().setCourses(course);
-        userServ.saveUser(userServ.getCurrUser());
-
-        return "redirect:/courses";
-    }
-
-    @Override
-    public String courseHomePage(Course course, Model model) {
-        List<Lesson> lessons = getAllLessons(course);
-        model.addAttribute("is_creator", userServ.isCreator(course));
-        model.addAttribute("course", course);
-        model.addAttribute("lessons", lessons);
-
-        return "course/homePage";
-    }
-
-    @Override
-    public String enroll(Course course) {
-        userServ.getCurrUser().setCourses(course);
-        userServ.saveUser(userServ.getCurrUser());
-
-        return "redirect:/courses/" + course.getId() + "/home";
-    }
-
-    @Override
-    public String createdCourses(Model model) {
-        model.addAttribute("user", userServ.getCurrUser());
-
-        return "course/createdCourses";
+        return filename;
     }
 }

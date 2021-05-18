@@ -43,6 +43,7 @@ import webcourses.webcourse.entity.Material;
  */
 public interface
 MaterialRepo extends JpaRepository<Material, Long> {
+
     Optional<Material>  findByLesson(Lesson lesson);
 
     List<Material> findAllByLesson(Lesson lesson);

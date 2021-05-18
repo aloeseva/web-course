@@ -42,6 +42,7 @@ import java.util.Optional;
  * @since 0.0.1
  */
 public interface ResultRepo extends JpaRepository<Result, Long> {
+
     Optional<Result> findById(Long id);
 
     Result findAllByAnswerAndUserAndAttempt(Answer answer, User user, long attempt);

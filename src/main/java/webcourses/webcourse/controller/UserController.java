@@ -39,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +47,8 @@ import org.springframework.web.bind.annotation.RestController;
 import webcourses.webcourse.entity.User;
 import webcourses.webcourse.entity.enums.Role;
 import webcourses.webcourse.service.UserServ;
+
+import javax.validation.Valid;
 
 /**
  * Rest implementation of User controller.
@@ -68,10 +71,11 @@ public class UserController {
 
     @PostMapping("/user/edit")
     public String editUser(
-            @RequestParam final Map<String, String> form,
-            @RequestParam("userId") final User user
+            @RequestParam Map<String, String> form,
+            @RequestParam("userId") User user,
+            Model model
     ) {
-        return userServ.editUser(form, user);
+        return userServ.editUser(form, user, model);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

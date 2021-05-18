@@ -39,19 +39,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import webcourses.webcourse.auth.AuthenticationFacade;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
 import webcourses.webcourse.entity.enums.Role;
 import webcourses.webcourse.repos.UserRepo;
 import webcourses.webcourse.service.UserServ;
+import webcourses.webcourse.util.ControllerUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServImpl implements UserServ, UserDetailsService
-{
+public class UserServImpl implements UserServ, UserDetailsService {
     private static final String RETURN_ALL_USER_VIEW = "user/all";
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServImpl.class);
 
@@ -85,25 +86,40 @@ public class UserServImpl implements UserServ, UserDetailsService
     }
 
     @Override
-    public String editUser(Map<String, String> form, User user) {
-        user.setUsername(form.get("login_change"));
-        user.setEmail(form.get("email_change"));
-        String firstName = form.get("first_name_change");
-        String lastName = form.get("last_name_change");
-        if (!firstName.equals("")) {
-            user.setFirstName(firstName);
+    public String editUser(Map<String, String> form, User user, Model model) {
+        String resultView = "redirect:/user";
+        //todo: переименовать значения из form, добавить проверки в валидацию
+        if (true) {
+            user.setUsername(form.get("loginChange"));
+            user.setEmail(form.get("emailChange"));
+            String firstName = form.get("firstNameChange");
+            String lastName = form.get("lastNameChange");
+            if (!firstName.equals("")) {
+                user.setFirstName(firstName);
+            } else {
+                user.setFirstName(null);
+            }
+            if (!lastName.equals("")) {
+                user.setLastName(lastName);
+            } else {
+                user.setLastName(null);
+            }
         } else {
-            user.setFirstName(null);
-        }
-        if (!lastName.equals("")) {
-            user.setLastName(lastName);
-        } else {
-            user.setLastName(null);
+//            fillUserModel(model, user);
+//            Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
+//            model.mergeAttributes(errors);
+//            resultView = "user/homePage";
         }
 
         saveUser(user);
-        return "redirect:/user";
+        return resultView;
     }
+
+    //todo: сделвть
+
+//    private boolean isNameValid(String name) {
+//        if (name.length() > 5)
+//    }
 
     @Override
     public User findByName(String userName) {
@@ -113,6 +129,11 @@ public class UserServImpl implements UserServ, UserDetailsService
     @Override
     public String userPage(Model model) {
         User user = findByName(getCurrUser().getUsername());
+        fillUserModel(model, user);
+        return "user/homePage";
+    }
+
+    private void fillUserModel(Model model, User user) {
         boolean isAdmin = user.isAdmin();
         boolean isTeacher = user.isTeacher();
         model.addAttribute("username", user.getUsername());
@@ -121,7 +142,6 @@ public class UserServImpl implements UserServ, UserDetailsService
         model.addAttribute("lastName", user.getLastName());
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isTeacher", isTeacher);
-        return "user/homePage";
     }
 
     @Override
@@ -155,6 +175,7 @@ public class UserServImpl implements UserServ, UserDetailsService
                 creators) {
             if (creator.getId().equals(getCurrUser().getId())) {
                 isCreator = true;
+                break;
             }
         }
         return isCreator;

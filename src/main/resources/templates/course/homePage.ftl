@@ -37,7 +37,7 @@
                     Курс: ${course.name }
                 </div>
 
-                <#if is_creator>
+                <#if isCreator>
                     <a class="create_lesson_btn"
                        href="/courses/${course.id}/lesson/create">
                         Создать урок

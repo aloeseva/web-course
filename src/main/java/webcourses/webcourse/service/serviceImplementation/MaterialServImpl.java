@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import webcourses.webcourse.util.FilesUtils;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.Lesson;
 import webcourses.webcourse.entity.Material;
@@ -48,14 +49,12 @@ import webcourses.webcourse.service.MaterialServ;
 import webcourses.webcourse.service.UserServ;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MaterialServImpl implements MaterialServ {
@@ -64,24 +63,25 @@ public class MaterialServImpl implements MaterialServ {
     private final MaterialRepo materialRepo;
     private final UserServ userServ;
 
+    @Value("${upload.path}")
+    private String uploadPath;
+
     @Autowired
     public MaterialServImpl(MaterialRepo materialRepo, UserServ userServ) {
         this.materialRepo = materialRepo;
         this.userServ = userServ;
     }
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     @Override
     public List<Material> getAllMaterials(Lesson lesson) {
-        List<Material> materials = new LinkedList<>();
-        for (Material material :
-                materialRepo.findAll()) {
-            if (material.getLesson().getId().equals(lesson.getId()))
-                materials.add(material);
-        }
-        return materials;
+        List<Material> materials = materialRepo.findAll();
+
+        return materials.stream()
+                .filter(material -> {
+                    Lesson materialLesson = material.getLesson();
+                    return materialLesson.getId().equals(lesson.getId());
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -91,11 +91,12 @@ public class MaterialServImpl implements MaterialServ {
 
     @Override
     public void download(HttpServletResponse response, Material material) {
-        Path file = Paths.get(uploadPath, material.getFileName());
-        Transliterator toLatinTrans = Transliterator.getInstance("Russian-Latin/BGN");
-        String name = toLatinTrans.transliterate(material.getName().replace(' ', '_'));
+        Path file = Paths.get(uploadPath, material.getName());
         if (Files.exists(file)) {
+            Transliterator toLatinTrans = Transliterator.getInstance("Russian-Latin/BGN");
+            String name = toLatinTrans.transliterate(material.getName().replace(' ', '_'));
             response.addHeader("Content-Disposition", "attachment; filename=" + name);
+
             try {
                 Files.copy(file, response.getOutputStream());
                 response.getOutputStream().flush();
@@ -115,49 +116,29 @@ public class MaterialServImpl implements MaterialServ {
     }
 
     @Override
-    public String addMaterial(Course course, Lesson lesson, String name, MultipartFile file) {
-        if (userServ.isCreator(course)) {
+    public String addMaterial(Course course, Lesson lesson, String name, MultipartFile file, Model model) {
+        String resultView = "redirect:/courses/" + course.getId() + "/lesson/" + lesson.getId();
+        if (!StringUtils.isEmpty(file.getOriginalFilename()) && userServ.isCreator(course)) {
             Material material = new Material();
-            String fileName = file.getOriginalFilename();
+            String fileName = FilesUtils.getFileNameByFile(file, null, uploadPath);
             if (name.equals("")) {
                 name = fileName;
             }
 
-            String m_type = FilenameUtils.getExtension(fileName);
+            String mType = FilenameUtils.getExtension(fileName);
             int nextMaterialId = getAllMaterials(lesson).size() + 1;
             fileName = lesson.getId().toString() + '_' + nextMaterialId + '_' + fileName;
 
-            String originalFilename = file.getOriginalFilename();
-            if (!StringUtils.isEmpty(originalFilename)) {
-                File uploadDir = new File(uploadPath);
-
-                if (!uploadDir.exists()) {
-                    if (uploadDir.mkdir()) {
-                        LOGGER.info("Path was successful create.");
-                    } else {
-                        LOGGER.warn("Path creation was not successful.");
-                    }
-                }
-
-                String uuidFile = UUID.randomUUID().toString();
-                String resultFileName = uuidFile + "." + fileName;
-
-                try {
-                    file.transferTo(new File(uploadPath + "/" + resultFileName));
-                    LOGGER.info("File was received.");
-                } catch (IOException e) {
-                    LOGGER.error("Something went wrong.", e);
-                }
-
-                material.setName(name);
-                material.setFileName(resultFileName);
-                material.setExtension(m_type);
-                material.setLesson(lesson);
-            }
-
+            material.setName(name);
+            material.setFileName(fileName);
+            material.setExtension(mType);
+            material.setLesson(lesson);
             save(material);
+        } else {
+            model.addAttribute("materialError", "Material file couldn't be null!");
+            resultView = "course/lesson/material/create";
         }
 
-        return "redirect:/courses/" + course.getId() + "/lesson/" + lesson.getId();
+        return resultView;
     }
 }

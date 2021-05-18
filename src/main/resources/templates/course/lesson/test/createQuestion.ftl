@@ -33,7 +33,7 @@
                     <input
                             type="text"
                             class="question__input"
-                            name="question_text"
+                            name="questionText"
                             id="question_text"
                             placeholder="Text"
                             required
@@ -44,7 +44,7 @@
                     <input
                             type="text"
                             class="question__input"
-                            name="max_val"
+                            name="maxVal"
                             id="max_val"
                             placeholder="10"
                             required
@@ -52,7 +52,7 @@
 
 
                     <label class="question__label">Тип вопроса</label>
-                    <select class="question__input" id="question_type" name="question_type"
+                    <select class="question__input" id="question_type" name="questionType"
                             onchange="changeTypeOfAnswer()">
                         <option value="option">С выбором</option>
                         <option value="text" selected>Текстовое поле</option>
@@ -64,7 +64,7 @@
                         <input
                                 type="text"
                                 class="question__input"
-                                name="answer_text"
+                                name="answerText"
                                 id="answer"
                                 placeholder="Ответ"
                         >

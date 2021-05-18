@@ -37,7 +37,12 @@
     text-decoration: none;
 }
 
-
-
-
-
+.mater__error {
+    width: auto;
+    background-color: #f64c72;
+    color: aliceblue;
+    padding: 15px;
+    margin-bottom: 15px;
+    word-wrap: break-word;
+    text-align: center;
+}

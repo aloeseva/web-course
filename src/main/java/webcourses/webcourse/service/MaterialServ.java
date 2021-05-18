@@ -40,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public interface MaterialServ {
+
     List<Material> getAllMaterials(Lesson lesson);
 
     void save(Material material);
@@ -48,5 +49,5 @@ public interface MaterialServ {
 
     String addMaterial(Course course, Lesson lesson, Model model);
 
-    String addMaterial(Course course, Lesson lesson, String name, MultipartFile file);
+    String addMaterial(Course course, Lesson lesson, String name, MultipartFile file, Model model);
 }

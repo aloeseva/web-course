@@ -33,7 +33,7 @@
                     <input
                             type="text"
                             class="question__input"
-                            name="question_text"
+                            name="questionText"
                             id="question_text"
                             placeholder="Text"
                             value="${ question.text }"
@@ -45,7 +45,7 @@
                     <input
                             type="text"
                             class="question__input"
-                            name="max_val"
+                            name="maxVal"
                             id="max_val"
                             value="${ question.maxVal }"
                             placeholder="10"
@@ -54,7 +54,7 @@
 
 
                     <label class="question__label">Тип вопроса</label>
-                    <select class="question__input" id="question_type" name="question_type"
+                    <select class="question__input" id="questionType" name="questionType"
                             onchange="changeTypeOfAnswer()">
                         <#if question.QType == "option">
                             <option value="option" selected>С выбором</option>
@@ -65,20 +65,20 @@
                         </#if>
                     </select>
 
-                    <#if question.qType == "text">
+                    <#if question.QType == "text">
                         <div id="textAnswer" class="textAnswer">
                             <label class="question__label">Ответ</label>
                             <input
                                     type="text"
                                     class="question__input"
-                                    name="answer_text"
+                                    name="answerText"
                                     id="answer"
                                     placeholder="Ответ"
                                     value="${ question.answers[0].text }"
                             >
                         </div>
 
-                    <#elseif question.qType == "option">
+                    <#elseif question.QType == "option">
                         <input type="text" id="count" name="count" value="${ answers?size}" hidden>
                         <div id="optionAnswer">
                             <#list answers as count>

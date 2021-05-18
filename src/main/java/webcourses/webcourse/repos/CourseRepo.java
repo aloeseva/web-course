@@ -43,6 +43,7 @@ import webcourses.webcourse.entity.User;
  * @since 0.0.1
  */
 public interface CourseRepo extends JpaRepository<Course, Long> {
+
     List<Course> findByName(String name);
 
     Optional<Course> findCourseByAuthors(User user);

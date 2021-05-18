@@ -34,14 +34,12 @@ import webcourses.webcourse.entity.Question;
 import webcourses.webcourse.entity.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface QuestionServ {
+
     List<Question> getAllQuestions(Test test);
 
     void save(Question question);
 
     void delete(Question question);
-
-    Optional<Question> getQuestion(Question question);
 }

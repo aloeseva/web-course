@@ -30,28 +30,18 @@
 
 package webcourses.webcourse.entity;
 
-import java.util.*;
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
+import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import webcourses.webcourse.validation.ValidPassword;
 import webcourses.webcourse.entity.enums.Role;
+
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import java.util.*;
 
 /**
  * Entity class of User.
@@ -60,46 +50,90 @@ import webcourses.webcourse.entity.enums.Role;
  */
 @Entity
 @Table(name = "user")
-@SuppressWarnings("PMD.DataClass")
+@ValidPassword( message =
+        "\nPassword rules: " +
+                "\nMin length = 8, max = 30." +
+                "\nOne uppercase character." +
+                "\nOne digit character." +
+                "\nOne special character." +
+                "\nShouldn't has whitespaces."
+)@SuppressWarnings("PMD.DataClass")
 public class User implements UserDetails {
+    private static final String EMAIL_PATTERN = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
+            "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
+            "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\]?)|(?:[a-zA-Z0-9-]+\\.)" +
+            "+(?:[a-zA-Z]){2,}\\.?)$";
+    private static final String NAME_PATTERN = "^[\\p{Lu}]+[\\p{L}’\\-]+[\\p{L}]$";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @NotBlank(message = "Username cannot be empty")
+    @Length(max = 30, message = "Username too long")
     private String username;
+
     @Email(message = "Email is not correct")
     @NotBlank(message = "Email cannot be empty")
+    @Pattern(regexp = EMAIL_PATTERN,
+            message = "Email couldn't exist")
     private String email;
+
     @NotBlank(message = "Password cannot be empty")
     private String password;
+
     private boolean active;
+
     @Nullable
+    @Length(max = 30, message = "First name too long")
+    @Pattern(regexp = NAME_PATTERN,
+            message = "First name couldn't has whitespaces, should start with upper character and may has only ' and - symbols")
     private String firstName;
+
     @Nullable
+    @Length(max = 30, message = "Last name too long")
+    @Length(max = 30, message = "First name too long")
+    @Pattern(regexp = NAME_PATTERN,
+            message = "Last name couldn't has whitespaces, should start with upper character and may has only ' and - symbols")
     private String lastName;
+
     private Date registrationDate;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "userRole",
-        joinColumns = @JoinColumn(name = "userId"))
+            joinColumns = @JoinColumn(name = "userId"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
-        name = "UserCourse",
-        joinColumns = {@JoinColumn(name = "userId")},
-        inverseJoinColumns = {@JoinColumn(name = "courseId")}
+            name = "UserCourse",
+            joinColumns = {@JoinColumn(name = "userId")},
+            inverseJoinColumns = {@JoinColumn(name = "courseId")}
     )
     Set<Course> courses = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     @JoinTable(
-        name = "UserCreateCourse",
-        joinColumns = {@JoinColumn(name = "userId")},
-        inverseJoinColumns = {@JoinColumn(name = "courseId")}
+            name = "UserCreateCourse",
+            joinColumns = {@JoinColumn(name = "userId")},
+            inverseJoinColumns = {@JoinColumn(name = "courseId")}
     )
     Set<Course> createdCourses = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Attempt> attempts;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Result> results;
+
+    public Set<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -107,6 +141,14 @@ public class User implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id);
+    }
+
+    public Set<Attempt> getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(Set<Attempt> attempts) {
+        this.attempts = attempts;
     }
 
     public boolean isAdmin() {
@@ -182,19 +224,21 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    @Nullable
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(final String firstName) {
+    public void setFirstName(@Nullable final String firstName) {
         this.firstName = firstName;
     }
 
+    @Nullable
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(final String lastName) {
+    public void setLastName(@Nullable final String lastName) {
         this.lastName = lastName;
     }
 

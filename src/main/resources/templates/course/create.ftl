@@ -26,7 +26,7 @@
                 <input
                         type="text"
                         class="course__input"
-                        name="course_name"
+                        name="courseName"
                         id="course_name"
                         placeholder="Введение в программирование"
                 >

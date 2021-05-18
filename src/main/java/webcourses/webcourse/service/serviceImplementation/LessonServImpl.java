@@ -36,10 +36,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import webcourses.webcourse.entity.Course;
-import webcourses.webcourse.entity.Lesson;
-import webcourses.webcourse.entity.Material;
-import webcourses.webcourse.entity.Test;
+import webcourses.webcourse.entity.*;
 import webcourses.webcourse.entity.dto.SolvedTest;
 import webcourses.webcourse.repos.LessonRepo;
 import webcourses.webcourse.service.*;
@@ -53,7 +50,11 @@ public class LessonServImpl implements LessonServ {
     private final MaterialServ materialServ;
 
     @Autowired
-    public LessonServImpl(LessonRepo lessonRepo, UserServ userServ, TestServ testServ, AttemptServ attemptServ, MaterialServ materialServ) {
+    public LessonServImpl(LessonRepo lessonRepo,
+                          UserServ userServ,
+                          TestServ testServ,
+                          AttemptServ attemptServ,
+                          MaterialServ materialServ) {
         this.lessonRepo = lessonRepo;
         this.userServ = userServ;
         this.testServ = testServ;
@@ -73,7 +74,7 @@ public class LessonServImpl implements LessonServ {
     }
 
     @Override
-    public String creatLesson(Course course, Model model) {
+    public String createLesson(Course course, Model model) {
 
         model.addAttribute("course", course);
 
@@ -81,7 +82,7 @@ public class LessonServImpl implements LessonServ {
     }
 
     @Override
-    public String creatLesson(Course course, String name, String description, Integer difficulty) {
+    public String createLesson(Course course, String name, String description, Integer difficulty) {
         if (userServ.isCreator(course)) {
             Lesson lesson = new Lesson();
             lesson.setName(name);
@@ -99,9 +100,10 @@ public class LessonServImpl implements LessonServ {
         List<SolvedTest> solvedTests = new LinkedList<>();
 
         boolean isSolved;
+        User currUser = userServ.getCurrUser();
         for (Test test :
                 tests) {
-            isSolved = attemptServ.getTestAttempt(userServ.getCurrUser(), test) > 0;
+            isSolved = attemptServ.getTestAttempt(currUser, test) > 0;
             SolvedTest solvedTest = new SolvedTest();
             solvedTest.setSolved(isSolved);
             solvedTest.setTest(test);

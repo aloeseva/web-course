@@ -22,7 +22,7 @@
         <div class="container">
             <div class="test__name"> ${ test.name }</div>
 
-            <#if is_creator>
+            <#if isCreator>
                 <a class="create_btn"
                    href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/question/create">
                     Добавить вопрос
@@ -68,13 +68,13 @@
                             </#list>
                         </#if>
 
-                        <#if is_creator>
+                        <#if isCreator>
                             <a href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/question/${question.id}/edit"
                                class="test__btn">Редактировать</a>
 
                         </#if>
 
-                        <#if is_creator>
+                        <#if isCreator>
                             <a href="/courses/${course.id}lesson/${lesson.id}/test/${test.id}/question/${question.id}/delete"
                                class="test__btn">Удалить</a>
                         </#if>

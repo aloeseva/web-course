@@ -53,3 +53,12 @@
 .createdCourses:hover {
     color: #242582;
 }
+
+.user__error {
+    width: 200px;
+    background-color: #f64c72;
+    color: aliceblue;
+    padding: 15px;
+    margin-bottom: 15px;
+    word-wrap: break-word;
+}

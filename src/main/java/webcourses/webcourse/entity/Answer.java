@@ -56,11 +56,11 @@ public class Answer {
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private Set<Result> results;
 
-    public String getaType() {
+    public String getAType() {
         return aType;
     }
 
-    public void setaType(String aType) {
+    public void setAType(final String aType) {
         this.aType = aType;
     }
 
@@ -94,14 +94,6 @@ public class Answer {
 
     public void setVal(final Long val) {
         this.val = val;
-    }
-
-    public String getAType() {
-        return aType;
-    }
-
-    public void setAType(final String aType) {
-        this.aType = aType;
     }
 
     public Question getQuestion() {

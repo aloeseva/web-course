@@ -42,6 +42,8 @@ import webcourses.webcourse.entity.Lesson;
  * @since 0.0.1
  */
 public interface LessonRepo extends JpaRepository<Lesson, Long> {
+
     Optional<Lesson> findByName(String name);
+
     List<Lesson> findAllByCourse(Course course);
 }

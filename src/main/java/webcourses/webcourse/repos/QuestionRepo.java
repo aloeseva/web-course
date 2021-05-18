@@ -44,6 +44,7 @@ import java.util.Optional;
  * @since 0.0.1
  */
 public interface QuestionRepo extends JpaRepository<Question, Long> {
+
     Optional<Question> findById(Long id);
 
     List<Question> findAllByTest(Test test);

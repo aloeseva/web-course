@@ -55,8 +55,9 @@ public class ResultServImpl implements ResultServ {
     @Override
     public int answerResult(User user, Answer answer, int attempt) {
         long result = 0;
-        if (resultRepo.findAllByAnswerAndUserAndAttempt(answer, user, attempt) != null) {
-            result = resultRepo.findAllByAnswerAndUserAndAttempt(answer, user, attempt).getResultValue();
+        Result allByAnswerAndUserAndAttempt = resultRepo.findAllByAnswerAndUserAndAttempt(answer, user, attempt);
+        if (allByAnswerAndUserAndAttempt != null) {
+            result = allByAnswerAndUserAndAttempt.getResultValue();
         }
         return Math.toIntExact(result);
     }
@@ -65,6 +66,4 @@ public class ResultServImpl implements ResultServ {
     public void save(Result result) {
         resultRepo.save(result);
     }
-
-
 }

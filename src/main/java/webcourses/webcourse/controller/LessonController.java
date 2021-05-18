@@ -58,19 +58,19 @@ public class LessonController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @GetMapping("/courses/{course}/lesson/create")
-    public String creatLessonPage(@PathVariable Course course, Model model) {
+    public String createLessonPage(@PathVariable Course course, Model model) {
 
-        return lessonServ.creatLesson(course, model);
+        return lessonServ.createLesson(course, model);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping("/courses/{course}/lesson/create")
-    public String creatLesson(@PathVariable Course course,
+    public String createLesson(@PathVariable Course course,
                               @RequestParam String lessonName,
                               @RequestParam String lessonDescription,
                               @RequestParam Integer lessonDifficulty
     ) {
-        return lessonServ.creatLesson(course, lessonName, lessonDescription, lessonDifficulty);
+        return lessonServ.createLesson(course, lessonName, lessonDescription, lessonDifficulty);
     }
 
     @GetMapping("/courses/{course}/lesson/{lesson}")

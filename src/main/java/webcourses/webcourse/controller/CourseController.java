@@ -83,11 +83,11 @@ public class CourseController {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('TEACHER')")
     @PostMapping("/courses/create")
     public String createCourse(
-            @RequestParam("course_name") final String course_name,
+            @RequestParam("courseName") final String courseName,
             @RequestParam("description") final String description,
             @RequestParam("file") MultipartFile file
     ) {
-        return courseServ.createCourse(course_name, description, file);
+        return courseServ.createCourse(courseName, description, file);
     }
 
     @GetMapping("/courses/{course}/home")

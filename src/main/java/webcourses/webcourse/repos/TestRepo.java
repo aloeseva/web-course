@@ -43,6 +43,7 @@ import java.util.Optional;
  * @since 0.0.1
  */
 public interface TestRepo extends JpaRepository<Test, Long> {
+
     Optional<Test> findByName(String name);
 
     List<Test> findAllByLesson(Lesson lesson);

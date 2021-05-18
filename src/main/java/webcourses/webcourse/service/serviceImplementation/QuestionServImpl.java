@@ -63,9 +63,4 @@ public class QuestionServImpl implements QuestionServ {
     public void delete(Question question) {
         questionRepo.delete(question);
     }
-
-    @Override
-    public Optional<Question> getQuestion(Question question) {
-        return questionRepo.findById(question.getId());
-    }
 }

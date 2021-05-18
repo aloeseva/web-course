@@ -43,6 +43,13 @@
                         name="file"
                         id="file"
                 >
+                <#if materialError??>
+                    <div class="mater__error">
+                        <ul class=flashes>
+                            <li>${materialError}</li>
+                        </ul>
+                    </div>
+                </#if>
                 <input type="hidden" value="${_csrf.token}" name="_csrf" />
 
                 <button type="submit" class="material__btn">Добавить</button>

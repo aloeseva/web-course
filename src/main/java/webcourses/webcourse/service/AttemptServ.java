@@ -35,6 +35,7 @@ import webcourses.webcourse.entity.Test;
 import webcourses.webcourse.entity.User;
 
 public interface AttemptServ {
+
     Integer getTestAttempt(User user, Test test);
 
     Attempt getAttempt(User user, Test test);

@@ -35,6 +35,7 @@ import webcourses.webcourse.entity.Result;
 import webcourses.webcourse.entity.User;
 
 public interface ResultServ {
+
     void delete(Result result);
 
     int answerResult(User user, Answer answer, int attempt);

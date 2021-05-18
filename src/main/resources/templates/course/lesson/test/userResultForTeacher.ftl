@@ -27,8 +27,8 @@
 
             <div class="result">
                 <div class="result__attempts">
-                    <#list attempt_count as attempt>
-                        <#if current_attempt != attempt + 1>
+                    <#list attemptCount as attempt>
+                        <#if currentAttempt != attempt + 1>
                             <a href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/user/${user.id}/result/teacher/${attempt + 1}"
                                class="attempt">${attempt + 1}"</a>
                         <#else >
@@ -43,7 +43,7 @@
                         <canvas id="myChart" width="400" height="400"></canvas>
                     </div>
                     <div class="result__progress">
-                        Ваш результат: ${ user_result } из ${ max_result }!
+                        Ваш результат: ${ userResult } из ${ maxResult }!
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
             </div>
 
             <script>
-                drawPie(${max_result},${user_result})
+                drawPie(${maxResult},${userResult})
             </script>
         </div>
     </div>

@@ -28,18 +28,57 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package webcourses.webcourse.service;
+package webcourses.webcourse.controller;
 
-import webcourses.webcourse.entity.Answer;
-import webcourses.webcourse.entity.Question;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import webcourses.webcourse.entity.User;
+import webcourses.webcourse.service.serviceImplementation.AuthServImpl;
 
-import java.util.List;
+import javax.validation.Valid;
 
-public interface AnswerServ {
+/**
+ * Rest implementation of Registration controller.
+ *
+ * @since 0.0.1
+ */
+@Controller
+@SuppressWarnings("PMD")
+public class AuthController {
+    private final AuthServImpl generalServ;
 
-    List<Answer> getAllAnswers(Question question);
+    @Autowired
+    public AuthController(AuthServImpl generalServ) {
+        this.generalServ = generalServ;
+    }
 
-    void save(Answer answer);
+    @GetMapping("/")
+    public String welcome() {
+        return "general/welcome";
+    }
 
-    void delete(Answer answer);
+    @GetMapping("/registration")
+    public String registration() {
+        return "general/register";
+    }
+
+    @PostMapping("/registration")
+    public String addUser(
+            @RequestParam("password2") String passwordConfirm,
+            @Valid User user,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        return generalServ.registration(passwordConfirm, user, model, bindingResult);
+    }
+
+    @GetMapping("/403")
+    public String invalidRoute403() {
+        return "error/fourZeroThreeError";
+    }
 }

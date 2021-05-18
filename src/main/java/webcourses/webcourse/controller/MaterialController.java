@@ -88,9 +88,10 @@ public class MaterialController {
             @PathVariable Course course,
             @PathVariable Lesson lesson,
             @RequestParam String materialName,
-            @RequestParam("file") MultipartFile file
+            @RequestParam("file") MultipartFile file,
+            Model model
     ) {
-        return materialServ.addMaterial(course, lesson, materialName, file);
+        return materialServ.addMaterial(course, lesson, materialName, file, model);
     }
 
 }

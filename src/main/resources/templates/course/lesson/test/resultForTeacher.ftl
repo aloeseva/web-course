@@ -26,7 +26,7 @@
             </div>
 
             <div class="all_results">
-                <#list user_result as result>
+                <#list userResult as result>
                     <div class="user__result">
                         <div class="user__result__name">
                             <#if result.user.firstName?? && result.user.lastName??>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="user__result__right">
                             <#if result.attemptCount != 0>
-                                <b>Лучший результат: </b>${result.bestUserResult} / ${max_possible_result}
+                                <b>Лучший результат: </b>${result.bestUserResult} / ${maxPossibleResult}
                                 <b>Всего попыток: </b>${result.attemptCount}
                                 <a class="result__link"
                                    href="/courses/${course.id}/lesson/${lesson.id}/test/${test.id}/user/${result.user.id}/result/teacher/${1}">Подробнее</a>
@@ -50,7 +50,7 @@
                 </#list>
                 <div class="user__result">
                     <div class="user__result__name">
-                        <b>Колличество пользователей: </b>${ count_of_user } <b>Средняя оценка: </b>${ avg_of_result }
+                        <b>Колличество пользователей: </b>${ countOfUser } <b>Средняя оценка: </b>${ avgOfResult }
                     </div>
                 </div>
             </div>

@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AnswerRepo extends JpaRepository<Answer, Long> {
+
     Optional<Answer> findById(Long id);
 
     List<Answer> findAllByQuestion(Question question);

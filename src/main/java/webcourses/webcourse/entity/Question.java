@@ -64,11 +64,11 @@ public class Question {
         this.answers = answers;
     }
 
-    public String getqType() {
+    public String getQType() {
         return qType;
     }
 
-    public void setqType(String qType) {
+    public void setQType(String qType) {
         this.qType = qType;
     }
 
@@ -94,14 +94,6 @@ public class Question {
 
     public void setMaxVal(final Long maxVal) {
         this.maxVal = maxVal;
-    }
-
-    public String getQType() {
-        return qType;
-    }
-
-    public void setQType(final String qType) {
-        this.qType = qType;
     }
 
     public Test getTest() {

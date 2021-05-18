@@ -31,6 +31,7 @@
 package webcourses.webcourse.service;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import webcourses.webcourse.entity.Course;
 import webcourses.webcourse.entity.User;
 
@@ -46,7 +47,7 @@ public interface UserServ {
 
     boolean addUser(User user);
 
-    String editUser(Map<String, String> form, User user);
+    String editUser(Map<String, String> form, User user, Model model);
 
     User findByName(String userName);
 

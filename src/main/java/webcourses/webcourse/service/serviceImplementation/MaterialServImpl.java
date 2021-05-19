@@ -91,7 +91,7 @@ public class MaterialServImpl implements MaterialServ {
 
     @Override
     public void download(HttpServletResponse response, Material material) {
-        Path file = Paths.get(uploadPath, material.getName());
+        Path file = Paths.get(uploadPath, material.getFileName());
         if (Files.exists(file)) {
             Transliterator toLatinTrans = Transliterator.getInstance("Russian-Latin/BGN");
             String name = toLatinTrans.transliterate(material.getName().replace(' ', '_'));
@@ -121,13 +121,13 @@ public class MaterialServImpl implements MaterialServ {
         if (!StringUtils.isEmpty(file.getOriginalFilename()) && userServ.isCreator(course)) {
             Material material = new Material();
             String fileName = FilesUtils.getFileNameByFile(file, null, uploadPath);
-            if (name.equals("")) {
-                name = fileName;
-            }
-
             String mType = FilenameUtils.getExtension(fileName);
-            int nextMaterialId = getAllMaterials(lesson).size() + 1;
-            fileName = lesson.getId().toString() + '_' + nextMaterialId + '_' + fileName;
+
+            if (name.equals("")) {
+                name = file.getOriginalFilename();
+            } else {
+                name += "." + mType;
+            }
 
             material.setName(name);
             material.setFileName(fileName);

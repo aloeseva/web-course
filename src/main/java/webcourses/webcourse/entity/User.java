@@ -59,10 +59,6 @@ import java.util.*;
                 "\nShouldn't has whitespaces."
 )@SuppressWarnings("PMD.DataClass")
 public class User implements UserDetails {
-    private static final String EMAIL_PATTERN = "^(?:[a-zA-Z0-9_'^&/+-])+(?:\\.(?:[a-zA-Z0-9_'^&/+-])+)" +
-            "*@(?:(?:\\[?(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))\\.)" +
-            "{3}(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\]?)|(?:[a-zA-Z0-9-]+\\.)" +
-            "+(?:[a-zA-Z]){2,}\\.?)$";
     private static final String NAME_PATTERN = "^[\\p{Lu}]+[\\p{L}’\\-]+[\\p{L}]$";
 
     @Id
@@ -75,8 +71,6 @@ public class User implements UserDetails {
 
     @Email(message = "Email is not correct")
     @NotBlank(message = "Email cannot be empty")
-    @Pattern(regexp = EMAIL_PATTERN,
-            message = "Email couldn't exist")
     private String email;
 
     @NotBlank(message = "Password cannot be empty")

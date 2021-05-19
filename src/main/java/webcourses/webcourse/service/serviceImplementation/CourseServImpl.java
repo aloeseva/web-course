@@ -45,6 +45,7 @@ import webcourses.webcourse.repos.CourseRepo;
 import webcourses.webcourse.repos.LessonRepo;
 import webcourses.webcourse.service.CourseServ;
 import webcourses.webcourse.service.UserServ;
+import webcourses.webcourse.util.FilesUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -127,7 +128,7 @@ public class CourseServImpl implements CourseServ {
     @Override
     public String createCourse(String name, String description, MultipartFile file) {
         Course course = new Course();
-        String filename = getFileNameByFile(file);
+        String filename = FilesUtils.getFileNameByFile(file, "course.png", uploadPath);
 
         course.setName(name);
         course.setDescription(description);
